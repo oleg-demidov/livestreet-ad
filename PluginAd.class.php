@@ -12,7 +12,7 @@ if (!class_exists('Plugin')) {
     die('Hacking attempt!');
 }
 
-class PluginTest extends Plugin
+class PluginAd extends Plugin
 {
 
     protected $aInherits = array(
@@ -23,7 +23,7 @@ class PluginTest extends Plugin
 //            'ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'
 //        ],
 //        'template' => array(
-//            'admin:component.p-category.form' => '_components/p-category/form.tpl'
+//            'component.topic.add-type' => '_components/topic/topic-add-type-ad.tpl'
 //        ),
         //'entity' =>array('ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'),
     );
@@ -35,11 +35,13 @@ class PluginTest extends Plugin
 
     public function Activate()
     {
+        $this->Category_CreateTargetType('specialization', 'Специализации', array(), true);
         return true;
     }
 
     public function Deactivate()
     {
+        $this->Category_RemoveTargetType('specialization', ModuleCategory::TARGET_STATE_NOT_ACTIVE);
         return true;
     }
 }

@@ -6,6 +6,6 @@
 /**
  * Роутинг
  */
-//$config['$root$']['router']['page']['page'] = 'PluginPage_ActionPage';
+$config['$root$']['router']['page']['masters'] = 'PluginAd_ActionMasters';
 
 return $config;
