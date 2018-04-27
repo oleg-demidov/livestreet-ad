@@ -1,0 +1,13 @@
+{
+    "name": "masonry",
+    "version": "1.0.0",
+    "dependencies": {
+    },
+    "templates": {
+    },
+    "scripts": {
+        "masonry":"js/masonry.pkgd.min.js"
+    },
+    "styles": {
+    }
+}

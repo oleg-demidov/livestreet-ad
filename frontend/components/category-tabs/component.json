@@ -1,0 +1,17 @@
+{
+    "name": "category-tabs",
+    "version": "1.0.0",
+    "dependencies": {
+        "ad:masonry": "*"
+    },
+    "templates": {
+        "checkboxes":"category-tabs-checkboxes.tpl",
+        "links":"category-tabs-links.tpl"
+    },
+    "scripts": {
+        "category-tabs":"js/category-tabs.js"
+    },
+    "styles": {
+        "category-tabs":"css/category-tabs.css"
+    }
+}

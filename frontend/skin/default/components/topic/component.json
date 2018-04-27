@@ -1,0 +1,8 @@
+{
+    "name":"topic",
+    "templates": {
+        "add-type-ad": "topic-add-type-ad.tpl",
+        "type-ad-form": "topic-add-type-ad-form.tpl",
+        "type-ad-contact":"topic-add-type-ad-contact.tpl"
+    }
+}

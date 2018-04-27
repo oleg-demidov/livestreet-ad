@@ -1,0 +1,66 @@
+.fl-category-tabs{
+    overflow: auto;
+}
+
+.fl-category-tabs-block{
+    width: 300px;
+    margin-bottom: 15px;
+}
+.fl-category-tabs .parent-item{
+    font-weight: bolder;
+}
+.fl-category-tabs .child-item{
+    margin-left: 20px;
+}
+.fl-category-tabs .ls-tab-pane-content{
+    font-size: 15px;
+}
+.fl-category-tabs .ls-tab-pane-content a{
+    margin-bottom: 5px;
+    display: block;
+}
+.fl-category-tabs .ls-field {
+    padding: 0px;
+    margin-bottom: 0px;
+}
+.fl-category-tabs .ls-tab-list{
+    float: left;
+}
+.fl-category-tabs .ls-tabs-panes{
+    float: right;
+    width: 725px;
+    min-height: 500px;
+}
+.fl-category-tabs .ls-tab{
+    float: none;
+    position: relative;
+}
+.fl-category-tabs .ls-tab:not(.active){
+    background: none;
+}
+.fl-category-tabs .ls-tab.active:after{
+        top: 0;
+    content: '';
+    right: -26px;
+    position: absolute;
+    border: 17px solid transparent;
+    border-left: 10px solid #2f8bbc;
+}
+.fl-category-tabs .ls-tab:hover:not(.active){
+    background: #eee;
+}
+.fl-category-tabs .ls-field-label {
+    padding: 2px 4px 2px 24px;
+}
+.fl-category-tabs .ls-field-label:hover {
+    padding: 1px 3px 1px 23px;
+    border: 1px #eeeeee solid;
+    background: #eee;
+    border-radius: 5px;
+}
+.fl-category-tabs .ls-field-holder {
+    padding: 3px 6px;
+}
+.fl-category-tabs .ls-field-label {
+    margin-bottom: 0px;
+}

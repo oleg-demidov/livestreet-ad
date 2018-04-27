@@ -1,0 +1,13 @@
+{
+    "name": "jquery-ui",
+    "version": "1.0.0",
+    "dependencies": {
+        "ls-vendor": "*"
+    },    
+    "scripts": {
+        "jquery-ui":"jquery-ui.min.js"
+    },
+    "styles":{
+        "jquery-ui":"jquery-ui.min.css"
+    }
+}

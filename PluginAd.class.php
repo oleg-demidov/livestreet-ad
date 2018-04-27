@@ -16,22 +16,25 @@ class PluginAd extends Plugin
 {
 
     protected $aInherits = array(
-//        'module' => array(
-//            'ModuleCategory' => 'PluginFixCategory_ModuleCategory',
-//        ),
+        'module' => array(
+            'ModuleGeo' => '_ModuleGeo',
+        ),
 //        'entity'=>[
 //            'ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'
 //        ],
-//        'template' => array(
-//            'component.topic.add-type' => '_components/topic/topic-add-type-ad.tpl'
-//        ),
+        'template' => array(
+            'component.topic.add-type' => '_components/topic/topic-add-type.tpl'
+        ),
         //'entity' =>array('ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'),
     );
 
     public function Init()
     {
-       
-     }
+        $this->Component_Add('ad:category-tabs');
+        $this->Viewer_AppendScript($sPath = Plugin::GetTemplateWebPath('ad').'assets/js/init.js');
+        
+        $this->Geo_AddTargetType('topic');
+    }
 
     public function Activate()
     {
