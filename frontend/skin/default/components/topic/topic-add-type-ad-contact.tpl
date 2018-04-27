@@ -11,4 +11,11 @@
     countries = $aGeoCountries
     regions   = $aGeoRegions
     cities    = $aGeoCities
-    place     = $oGeoTarget}
+    place     = $oGeoTarget
+    rules     = [
+        'required'          => true,
+        'trigger'           => 'change focusout submit',
+        'group'             => 'contacts',
+        'type'              => 'number',
+        'multiple'          => true
+    ]}

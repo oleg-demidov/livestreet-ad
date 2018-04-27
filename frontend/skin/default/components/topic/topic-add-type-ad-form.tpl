@@ -13,7 +13,7 @@
     {block 'add_topic_form_begin'}{/block}
 
     {* Выбор блога *}
-    {if ! $skipBlogs}
+    {if ! $skipBlogs and Config::Get('plugin.ad.acl.user.choose_ad_blog')}
         {$blogsSelect = []}
         {$blogsSelectId = []}
         {$blogsSelectedId=[]}
@@ -60,9 +60,14 @@
     {component 'field' template='text'
         name        = 'topic[topic_title]'
         value       = {(( $topic ) ? $topic->getTitle() : '')}
-        entityField = 'topic_title'
-        entity      = 'ModuleTopic_EntityTopic'
-        label       = $aLang.topic.add.fields.title.label}
+        label       = $aLang.topic.add.fields.title.label
+        rules       = [
+            'required'      => true,
+            'maxlength'     => Config::Get('module.topic.title_max_length'),
+            'minlength'     => Config::Get('module.topic.title_min_length'),
+            'trigger'       => 'keyup focusout',
+            'group'         => 'form'
+    ]}
 
     {* URL топика *}
     {if $oUserCurrent->isAdministrator()}
@@ -82,11 +87,16 @@
             name            = 'topic[topic_text_source]'
             value           = (( $topic ) ? $topic->getTextSource() : '')
             label           = $aLang.topic.add.fields.text.label
-            entityField     = 'topic_text_source'
-            entity          = 'ModuleTopic_EntityTopic'
             inputClasses    = 'js-editor-default'
             mediaTargetType = 'topic'
-            mediaTargetId   = ( $topic ) ? $topic->getId() : ''}
+            mediaTargetId   = ( $topic ) ? $topic->getId() : ''
+            rules       = [
+            'required'          => true,
+            'maxlength'         => Config::Get('module.topic.max_length'),
+            'minlength'         => Config::Get('module.topic.min_length'),
+            'trigger'           => 'keyup focusout',
+            'group'             => 'form'
+        ]}
     {/if}
 
     {block 'add_topic_form_text_after'}{/block}
@@ -99,7 +109,11 @@
         {component 'field' template='text'
             name    = 'topic[topic_tags]'
             value     = {(( $topic ) ? $topic->getTags() : '')}
-            rules   = [ 'required' => !Config::Get('module.topic.tags_allow_empty'), 'rangetags' => "[{$tagsCountMin},{$tagsCountMax}]" ]
+            rules   = [ 
+                'trigger'   => 'keyup focusout',
+                'group'     => 'form', 
+                'required'  => !Config::Get('module.topic.tags_allow_empty'), 
+                'rangetags' => "[{$tagsCountMin},{$tagsCountMax}]"]
             label   = {lang 'topic.add.fields.tags.label'}
             note    = {lang 'topic.add.fields.tags.note'}
             inputClasses = 'ls-width-full autocomplete-tags-sep'}

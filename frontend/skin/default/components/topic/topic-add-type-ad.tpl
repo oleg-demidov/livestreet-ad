@@ -9,11 +9,14 @@
         content => {component 'ad:category-tabs.checkboxes'  
                         categories=$aCategories 
                         categoriesSelected=$aCategoriesSelected
-                        rules=['mincheck' => 1, 
-                                'maxcheck' => 5, 
-                                'required' => true, 
-                                'errors-container' => '#parsley_errors_container', 
-                                'group' => 'category']}
+                        rules=[
+                            'mincheck'      => Config::Get('plugin.ad.acl.user.category.min'), 
+                            'maxcheck'      => Config::Get('plugin.ad.acl.user.category.max'), 
+                            'required'      => true, 
+                            'trigger'       => 'change',
+                            'errors-container' => '#parsley_errors_container', 
+                            'group'         => 'category'
+                    ]}
     ],
     [ 
         classes => 'form-tab',

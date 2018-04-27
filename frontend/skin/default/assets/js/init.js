@@ -14,19 +14,30 @@ jQuery(document).ready(function($){
         });
     }
     
-    $('.js-topic-category').lsTabs({
-        tabbeforeactivate:function(e, data){
-            data.element.find('.ls-tab-inner').removeClass('ls-button--danger');
-        }
-    });
+    $('.js-topic-category').lsTabs();
+    
+    $('.fl-category-tabs input').change(function(){
+        $(this).parsley().validate();
+    })
     
     $('.js-form-validate-ad').parsley().on('field:validate', function(inst){
-        if( !inst.isValid({group: 'category', force: true}) ){
-            let el = $('.ls-tab.category-tab .ls-tab-inner');
-            $('html, body').animate({ scrollTop: (el.offset().top - 50) }, 500);
-            el.addClass('ls-button--danger');
-        }
         
-    })
+        let tabs = ['category', 'form', 'contacts'];
+        
+        tabs.forEach(function(value, key){
+            let el = $('.ls-tab.'+value+'-tab .ls-tab-inner'); 
+        
+            if( !(inst.isValid({group: value}) === true)){            
+                el.addClass('ls-button--danger');
+            }
+            
+            if( inst.isValid({group: value} === true)){     
+                console.log(el)
+                el.removeClass('ls-button--danger');
+            }
+        });         
+        
+    }); 
+    
     
 });

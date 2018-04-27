@@ -34,7 +34,9 @@ class PluginAd_HookTopics extends Hook{
         if ($oType = $this->Category_GetTypeByTargetType('specialization')) {
             $aCategories = $this->Category_LoadTreeOfCategory(array('type_id' => $oType->getId()));
         }
-        $this->Viewer_Assign('aCategories', $aCategories);
+        if(isset($aCategories)){
+            $this->Viewer_Assign('aCategories', $aCategories);
+        }
         
         if(isset($aParams['oTopic'])){ 
             $aCategories = [];
