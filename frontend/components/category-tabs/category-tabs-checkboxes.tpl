@@ -54,7 +54,7 @@
                     </div>
                 {/strip}
             {/foreach}
-            
+            <div style="clear: both;"></div>
         {/capture}
         
         {$tab.content =  $smarty.capture.content_tab }

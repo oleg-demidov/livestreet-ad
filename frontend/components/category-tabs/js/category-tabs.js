@@ -27,7 +27,7 @@
             
             this.option('tabactivate', this.onMasonry.bind(this));           
             
-            this.elements.panes.height( this.option('height') );
+            //this.elements.panes.height( this.option('height') );
             
             if(this.element.hasClass('checkboxes')){
                 
@@ -39,6 +39,8 @@
             $(this.getActiveTab()).lsTab('getPane').masonry(this.option('masonry'));
         },
         onClickCheckbox:function(e){ 
+            this._trigger( 'checkboxchange', e, this );
+            
             var field = $(e.target).closest('.ls-field--checkbox');
             var childItems = field.parent().find('input:not(.parent-item input)')
             var parentItem = field.parent().find('.parent-item input');

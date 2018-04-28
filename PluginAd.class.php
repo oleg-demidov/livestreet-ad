@@ -31,6 +31,7 @@ class PluginAd extends Plugin
     public function Init()
     {
         $this->Component_Add('ad:category-tabs');
+        $this->Component_Add('ad:topic');
         $this->Viewer_AppendScript($sPath = Plugin::GetTemplateWebPath('ad').'assets/js/init.js');
         
         $this->Geo_AddTargetType('topic');

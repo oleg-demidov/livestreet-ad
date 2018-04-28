@@ -29,7 +29,6 @@
 .fl-category-tabs .ls-tabs-panes{
     float: right;
     width: 725px;
-    min-height: 500px;
 }
 .fl-category-tabs .ls-tab{
     float: none;
