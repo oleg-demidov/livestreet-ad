@@ -18,6 +18,7 @@ class PluginAd extends Plugin
     protected $aInherits = array(
         'module' => array(
             'ModuleGeo' => '_ModuleGeo',
+            'ModuleTopic' => '_ModuleTopic'
         ),
 //        'entity'=>[
 //            'ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'

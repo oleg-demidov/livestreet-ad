@@ -46,7 +46,7 @@
             var parentItem = field.parent().find('.parent-item input');
             
             if(field.hasClass('parent-item')){ 
-                childItems.prop("checked", e.target.checked);
+                childItems.prop("checked", e.target.checked).change();
                 return;
             }
             

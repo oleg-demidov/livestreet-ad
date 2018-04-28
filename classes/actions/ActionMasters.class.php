@@ -38,7 +38,7 @@ class PluginAd_ActionMasters extends ActionPlugin
         if($iPageMatch){
             array_pop($aParams);
         }
-        $aFilter['page'] = $iPageMatch?$iPageMatch:1;
+        $aFilter['#page'] = $iPageMatch?$iPageMatch:1;
         
         $tryNameGeo = ucfirst( urldecode( end($aParams) ) );
         if($tryNameGeo){
@@ -178,7 +178,7 @@ class PluginAd_ActionMasters extends ActionPlugin
             $aParams[] = strtolower($aFilter['geo_object']->getNameEn());
         }
         
-        if($aFilter['page'] and $aFilter['page']>1){
+        if($aFilter['#page'] and $aFilter['#page']>1){
             $aParams[] = 'page'.$aFilter['page'];
         }
 

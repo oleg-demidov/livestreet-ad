@@ -17,5 +17,6 @@
         'trigger'           => 'change focusout submit',
         'group'             => 'contacts',
         'type'              => 'number',
-        'multiple'          => true
+        'multiple'          => true,
+        'mincheck'          => 2
     ]}

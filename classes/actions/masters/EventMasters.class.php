@@ -10,10 +10,7 @@
 class PluginAd_ActionMasters_EventMasters extends Event {
 
     public function Init() {
-        $this->countOnPage = Config::Get('plugin.freelancer.poisk.per_page');
     }   
-
-    public $countOnPage;
 
     public function EventMasters() 
     {
@@ -45,13 +42,13 @@ class PluginAd_ActionMasters_EventMasters extends Event {
             $aFilter['geo_'.$aFilter['geo_object']->getType()] = $aFilter['geo_object']->getId();
         }
 
-        $aMasters = $this->getMastersByFilter($aFilter, $aOrder, ['geo_target']);        
+        $aMasters = $this->getMastersByFilter($aFilter, $aOrder);        
         
         $sBaseUrl = Router::GetPath('masters/'.$this->_getUrlByFilter($aFilter));
         
-       /* $aPaging = $this->Viewer_MakePaging($aMasters['count'], $aFilter['page'], 
-            $this->countOnPage,
-            Config::Get('plugin.freelancer.poisk.count_page_line'), 
+        $aPaging = $this->Viewer_MakePaging($aMasters['count'], $aFilter['#page'], 
+            Config::Get('plugin.ad.topic.per_page'),
+            Config::Get('plugin.ad.topic.count_page_line'), 
             $sBaseUrl,
             $this->_getRequestAllow());
         
@@ -64,7 +61,7 @@ class PluginAd_ActionMasters_EventMasters extends Event {
         $this->Viewer_Assign('sBaseUrl', $sBaseUrl );        
         $this->Viewer_Assign('aMasters',$aMasters['collection'] ); 
         $this->Viewer_Assign('iMastersCount',$aMasters['count'] );
-        $this->Viewer_Assign('aPaging',$aPaging );*/
+        $this->Viewer_Assign('aPaging',$aPaging );
     }
     
     public function EventMastersAjax() {
@@ -108,9 +105,9 @@ class PluginAd_ActionMasters_EventMasters extends Event {
         $aOrder =[$sOrderField => $sOrderWay];
         
         if (is_numeric(getRequestStr('page')) and getRequestStr('page') > 0) {
-            $aFilter['page'] = getRequestStr('page');
+            $aFilter['#page'] = getRequestStr('page');
         } else {
-            $aFilter['page'] = 1;
+            $aFilter['#page'] = 1;
         } 
         
         if($sQuery = getRequest('query')){
@@ -166,19 +163,32 @@ class PluginAd_ActionMasters_EventMasters extends Event {
         return $oViewer->Fetch("component@freelancer:search-form.breadcrumbs");
     }
     
-    public function getMastersByFilter($aFilter, $aOrder, $aAllowData = null) {
+    public function getMastersByFilter($aFilter, $aOrder) {
         
-        $aFilter['#select'] = ['user_id', 'user_login','user_profile_avatar', 'user_rating'];
+        $aFilter['#with'] = [];
+        $aFilter['#index-from'] = 'topic_id';
+        //$aFilter['#select'] = ['topic_id', 'user_login','user_profile_avatar', 'user_rating'];
         
         if(isset($aFilter['categories']) and sizeof($aFilter['categories'])){
             $aCategoryIds = array_keys($aFilter['categories']);
             $aFilter['#category'] = end($aCategoryIds);
+            $aFilter['#with'][] = 'category'; 
         }
         
         print_r($aFilter);
+        
+        unset($aFilter['geo_object']);
+        
+        $oTopics = $this->Topic_GetTopicItemsByFilter($aFilter);
+        
+        $this->Topic_AttachGeoTargets($oTopics['collection']);
+        
+        print_r($oTopics);
    
-        return 1;//$this->User_GetUsersByFilter($aFilter, $aOrder, $aFilter['page'] ,$this->countOnPage,$aAllowData );        
+        return $oTopics;//$this->User_GetUsersByFilter($aFilter, $aOrder, $aFilter['page'] ,$this->countOnPage,$aAllowData );        
         
     }
+    
+    publ
     
 }
