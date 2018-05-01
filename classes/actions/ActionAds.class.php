@@ -204,8 +204,8 @@ class PluginAd_ActionAds extends ActionPlugin
             $aParams[] = strtolower($aFilter['geo_object']->getNameEn());
         }
         
-        if($aFilter['#page'] and $aFilter['#page']>1){
-            $aParams[] = 'page'.$aFilter['page'];
+        if( !is_null($iPage) ){
+            $aParams[] = 'page'.$iPage;
         }
 
         $sUrl = join('/',$aParams); 

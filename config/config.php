@@ -21,8 +21,8 @@ $config['acl'] = [
 ];
 
 $config['topic'] = [
-    'count_page_line' => 10,
-    'per_page'  => 10
+    'count_page_line' => 2,
+    'per_page'  => 2
 ];
 
 

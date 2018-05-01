@@ -19,7 +19,7 @@
     font-weight: bolder;
     display: none;
 }
-.ls-nav:not(.ls-nav--sub) > .ls-nav-item > .ls-nav--sub{
+.fl-category-tree .ls-nav:not(.ls-nav--sub) > .ls-nav-item > .ls-nav--sub{
     top:0;
     left: 100%;
 }

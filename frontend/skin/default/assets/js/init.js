@@ -22,6 +22,9 @@ jQuery(document).ready(function($){
     
     $('.js-category-tree').flFieldCategoryTree(); 
     
+    
+    
+    
     /*
      * Ajax поиск обьявлений
      */
@@ -36,7 +39,8 @@ jQuery(document).ready(function($){
         selectors: {
             list: '.js-search-ad-results',
 //            more: '.js-more-search',
-            title: '@.js-search-ad-results-count'
+            title: '@.js-search-ad-results-count',
+            button :".js-search-ajax-button"
         },
         filters : [
             {
@@ -72,7 +76,17 @@ jQuery(document).ready(function($){
             }
         ],
         afterupdate: function ( event, data ) {
+            $('.js-pagination-topics-ad').lsPaginationAjax();
             //data.context.getElement( 'more' ).lsMore( 'option', 'params.next_page', 2 );
+        }
+    });
+    
+    /*
+     * Ajax пагинация
+     */
+    $('.js-pagination-topics-ad').lsPaginationAjax({
+        pagechanged: function(data, pageNumber){ console.log(data, pageNumber);
+            $( '.js-search-ajax-ads' ).lsSearchAjax('update', {page:pageNumber});
         }
     });
     

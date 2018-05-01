@@ -54,9 +54,9 @@ class PluginAd_ActionAds_EventAds extends Event {
         $this->Viewer_Assign('sBaseUrl', $sBaseUrl );        
         $this->Viewer_Assign('aAds',$aAds['collection'] ); 
         $this->Viewer_Assign('iAdsCount',$aAds['count'] );
-        $this->Viewer_Assign('aPaging',$aPaging );
+        $this->Viewer_Assign('paging',$aPaging );
         $this->Viewer_AssignJs('url_search_ad', Config::Get('plugin.ad.router.page'));
-         $this->Lang_AddLangJs('plugin.ad.ad.search_form.count_results');
+        $this->Lang_AddLangJs('plugin.ad.ad.search_form.count_results');
     }
     
     public function AssignGeo() {
@@ -91,10 +91,19 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         $sTitle = $this->Viewer_GetHtmlTitle();
         
+        $aPaging = $this->Viewer_MakePaging($aAds['count'], $aFilter['#page'], 
+            Config::Get('plugin.ad.topic.per_page'),
+            Config::Get('plugin.ad.topic.count_page_line'), 
+            $sBaseUrl,
+            $this->_getRequestAllow());
+        
         $oViewer = $this->Viewer_GetLocalViewer();
         $oViewer->Assign('topics',$aAds['collection'], true);
+        $oViewer->Assign('paging',$aPaging, true);
         $oViewer->Assign('oUserCurrent',$this->oUserCurrent );
-        $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@topic.list"));
+        $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@ad:topic.ad-list"));
+        
+        
         
         /*if(!getRequest('bMap')){
             $aPaging = $this->Viewer_MakePaging($aMasters['count'], $aFilter['page'], 
@@ -143,6 +152,10 @@ class PluginAd_ActionAds_EventAds extends Event {
             $aFilter['#category'] = end($aCategoryIds);
             unset($aFilter['categories']);
             $aFilter['#with'][] = 'category'; 
+        }
+        
+        if(isset($aFilter['#page']) and ! is_array($aFilter['#page'])){
+            $aFilter['#page'] = [$aFilter['#page'], Config::Get('plugin.ad.topic.per_page')];
         }
         
         if(isset($aFilter['geo_object'])){

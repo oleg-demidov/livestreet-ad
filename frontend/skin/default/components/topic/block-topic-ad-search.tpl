@@ -29,7 +29,7 @@
             cities    = $aGeoCities
             place     = $oGeoTarget}
             
-        {component 'button' text={lang 'plugin.ad.ad.block_search.button.text'}}
+        {component 'button' classes="js-search-ajax-button" text={lang 'plugin.ad.ad.block_search.button.text'}}
         
     </form>
 {/capture}
