@@ -33,7 +33,7 @@
                     {$categoriesLevel2 = $categoryLevel1->getChildren()}
 
                     {foreach $categoriesLevel2 as $categoryLevel2}
-                        {$checked = in_array($categoryLevel2->getId(), $categoriesSelected)}
+                        {$checked = $categoriesSelected and in_array($categoryLevel2->getId(), $categoriesSelected)}
                         {$count = ''}
                         {if $categoryLevel2->getCountTarget()}
                             {$count = {component 'badge' mods='warning' value=$categoryLevel2->getCountTarget()}}

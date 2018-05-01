@@ -6,7 +6,9 @@
 /**
  * Роутинг
  */
-$config['$root$']['router']['page']['masters'] = 'PluginAd_ActionMasters';
+$config['router']['page'] = 'masters';
+
+$config['$root$']['router']['page'][$config['router']['page']] = 'PluginAd_ActionAds';
 
 $config['acl'] = [
     'user' => [
@@ -22,5 +24,15 @@ $config['topic'] = [
     'count_page_line' => 10,
     'per_page'  => 10
 ];
+
+
+$config['$root$']['block']['ads_search'] = array(
+    'action' => array('masters'),
+    'blocks' => array(
+        'right' => array(
+            'component@ad:topic.block-topic-ad-search'   => array('priority' => 300, 'plugin' => 'ad')
+        )
+    )
+);
 
 return $config;

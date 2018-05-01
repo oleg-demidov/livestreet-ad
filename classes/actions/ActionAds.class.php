@@ -1,24 +1,27 @@
 <?php
 
 
-class PluginAd_ActionMasters extends ActionPlugin
+class PluginAd_ActionAds extends ActionPlugin
 {
     protected $oUserCurrent;
+    
+    protected $page;
 
     protected function RegisterEvent() {
+        $url = Config::Get('plugin.ad.router.page');
 
-
-        $this->RegisterEventExternal('Masters', 'PluginAd_ActionMasters_EventMasters');
-        $this->AddEventPreg( '/^ajax-search$/i', 'Masters::EventMastersAjax');
-        $this->AddEventPreg( '/^(page([1-9]\d{0,5}))?$/i', array('Masters::EventMasters', 'masters'));
-        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Masters::EventMasters', 'masters'));
-        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Masters::EventMasters', 'masters'));
-        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Masters::EventMasters', 'masters'));
-        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Masters::EventMasters', 'masters'));
+        $this->RegisterEventExternal('Ads', 'PluginAd_ActionAds_EventAds');
+        $this->AddEventPreg( '/^ajax-search$/i', 'Ads::EventAdsAjax');
+        $this->AddEventPreg( '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
+        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
+        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
+        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
+        $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
     }
 
     public function Init() {
         $this->oUserCurrent = $this->User_GetUserCurrent();
+        $this->page = Config::Get('plugin.ad.router.page');
     }
 
     public function _getFilterByParams() {
@@ -42,7 +45,7 @@ class PluginAd_ActionMasters extends ActionPlugin
         
         $tryNameGeo = ucfirst( urldecode( end($aParams) ) );
         if($tryNameGeo){
-            $oGeo = $this->_getGeoByParam( ['name_en_like' => $tryNameGeo.'%'] );
+            $oGeo = $this->_getGeoByParam( ['name_en_like' => $tryNameGeo] );
         }        
         if(isset($oGeo) and $oGeo){
             array_pop($aParams);
@@ -54,6 +57,26 @@ class PluginAd_ActionMasters extends ActionPlugin
         if($aCategories and sizeof($aCategories)){
             $aFilter['categories'] = $aCategories;
         }       
+        
+        return $aFilter;
+    }
+    public function _getFilterByRequest() {
+        $aFilter = [];
+        
+        if(getRequest('categories')){
+            $aCategories = $this->Category_GetCategoryItemsByFilter([
+                '#index-from' => 'id',
+                'id in' => getRequest('categories'),
+                '#select' => [ 'url_full', 'id']
+            ]);
+            $aFilter['categories'] = $aCategories;
+        }        
+        
+        if($oGeo = $this->_getGeoByRequest()){
+            $aFilter['geo_object'] = $oGeo;
+        }
+        
+        $aFilter['#page'] = getRequest('page', 1);
         
         return $aFilter;
     }
@@ -88,7 +111,7 @@ class PluginAd_ActionMasters extends ActionPlugin
     }
     
     public function _getUrlByRequest() {
-        $url = 'masters';
+        $url = $this->page;
         
         if(getRequest('categories')){
             $oCategory = $this->Category_GetCategoryByFilter([
@@ -111,8 +134,8 @@ class PluginAd_ActionMasters extends ActionPlugin
     
     public function _getRequestAllow() {
         $aRequestAllows = [
-            'query',
-            'categories',
+            'text',
+            //'categories',
             'country',
             'region',
             'city',
@@ -130,15 +153,18 @@ class PluginAd_ActionMasters extends ActionPlugin
         
     public function _getGeoByRequest() {
         $aFilter = [];
-        if($iGeo = getRequest('country')){
+        if(!$aGeo = getRequest('geo')){
+            return false;
+        }
+        if( isset($aGeo['country']) and ($iGeo = $aGeo['country']) ){
             $aFilter['country_id'] = $iGeo;
             $sGeoType = 'country';
         }
-        if($iGeo = getRequest('region')){
+        if( isset($aGeo['region']) and ($iGeo = $aGeo['region']) ){
             $aFilter['region_id'] = $iGeo;
             $sGeoType = 'region';
         }
-        if($iGeo = getRequest('city')){
+        if( isset($aGeo['city']) and ($iGeo = $aGeo['city']) ){
             $aFilter['city_id'] = $iGeo;
             $sGeoType = 'city';
         }
@@ -186,5 +212,7 @@ class PluginAd_ActionMasters extends ActionPlugin
         
         return $sUrl;
     }   
+    
+    
 
 }

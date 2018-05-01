@@ -1,0 +1,25 @@
+.fl-category-tree .ls-field-icon{
+    position: absolute;
+    margin: 6px;
+}
+.fl-category-tree .ls-field-category-input{
+    padding: 5px 26px;
+    text-overflow:  ellipsis;
+}
+.fl-category-tree .ls-field-holder{
+    position: relative;
+}
+
+.fl-category-tree .input-close-but{
+    position: absolute;
+    right: 0;
+    margin: 5px 9px;
+    cursor: pointer;
+    color: #e95e5e;
+    font-weight: bolder;
+    display: none;
+}
+.ls-nav:not(.ls-nav--sub) > .ls-nav-item > .ls-nav--sub{
+    top:0;
+    left: 100%;
+}

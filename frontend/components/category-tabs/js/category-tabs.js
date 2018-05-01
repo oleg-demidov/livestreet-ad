@@ -13,7 +13,7 @@
             },
             masonry:{
                 itemSelector:".fl-category-tabs-block",
-                columnWidth:300,
+                columnWidth:230,
 //                transitionDuration: '0.2s',
                 gutter: 5                
             },

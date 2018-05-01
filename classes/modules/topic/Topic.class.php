@@ -20,7 +20,9 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         
         $oGeoTargets = $this->Geo_GetTargetsByTargetArray('topic', $oTopicIds);
         foreach($oTopics as $iTopicId =>  $oTopic){
-            $oTopic->setGeoTarget($oGeoTargets[$iTopicId]);
+            if(isset($oGeoTargets[$iTopicId])){
+                $oTopic->setGeoTarget($oGeoTargets[$iTopicId]);
+            }
         }
     }
     

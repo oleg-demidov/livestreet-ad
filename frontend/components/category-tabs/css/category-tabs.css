@@ -3,7 +3,7 @@
 }
 
 .fl-category-tabs-block{
-    width: 300px;
+    width: 230px;
     margin-bottom: 15px;
 }
 .fl-category-tabs .parent-item{
@@ -28,7 +28,7 @@
 }
 .fl-category-tabs .ls-tabs-panes{
     float: right;
-    width: 725px;
+    width: 500px;
 }
 .fl-category-tabs .ls-tab{
     float: none;
@@ -62,4 +62,7 @@
 }
 .fl-category-tabs .ls-field-label {
     margin-bottom: 0px;
+}
+.parsley-errors-list{
+    clear: both;
 }

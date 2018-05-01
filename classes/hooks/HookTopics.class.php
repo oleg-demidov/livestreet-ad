@@ -12,7 +12,7 @@ class PluginAd_HookTopics extends Hook{
         $this->AddHook('get_topics_by_custom_filter', 'TopicAdRemove');
         
         $this->AddHook('topic_add_show', 'TopicFieldsAdd');
-        $this->AddHook('topic_edit_show', 'TopicFieldsAdd');
+        $this->AddHook('topic_edit_show', 'TopicFieldsEdit');
         
         //$this->AddHook('topic_edit_validate_before', 'TopicValidateBefore');
         $this->AddHook('topic_edit_after', 'TopicEditAfter');
@@ -31,6 +31,21 @@ class PluginAd_HookTopics extends Hook{
     }
     
     public function TopicFieldsAdd($aParams) {
+        if(Router::GetParam(0) !== 'ad'){
+            return false;
+        }
+        $this->AddFields($aParams);
+    }
+    
+    public function TopicFieldsEdit($aParams) {
+        if(!isset($aParams['oTopic']) or $aParams['oTopic']->getType() !== 'ad'){
+            return false;
+        }  
+        $this->AddFields($aParams);
+    }
+        
+    public function AddFields($aParams) {
+            
         if ($oType = $this->Category_GetTypeByTargetType('specialization')) {
             $aCategories = $this->Category_LoadTreeOfCategory(array('type_id' => $oType->getId()));
         }
@@ -47,19 +62,20 @@ class PluginAd_HookTopics extends Hook{
                 $aCategories[] = $oCategory->getId();
             }
             $this->Viewer_Assign('aCategoriesSelected', $aCategories);
+            /**
+            * Загружаем гео-объект привязки
+            */
+            $oGeoTarget = $this->Geo_GetTargetByTarget('topic', $oTopic->getId());
+            $this->Viewer_Assign('oGeoTarget', $oGeoTarget);
         }
         
-        /**
-         * Загружаем гео-объект привязки
-         */
-        $oGeoTarget = $this->Geo_GetTargetByTarget('topic', $oTopic->getId());
-        $this->Viewer_Assign('oGeoTarget', $oGeoTarget);
+        
         /**
          * Загружаем в шаблон список стран, регионов, городов
          */
         $aCountries = $this->Geo_GetCountries(array(), array('sort' => 'asc'), 1, 300);
         $this->Viewer_Assign('aGeoCountries', $aCountries['collection']);
-        if ($oGeoTarget) {
+        if (isset($oGeoTarget)) {
             if ($oGeoTarget->getCountryId()) {
                 $aRegions = $this->Geo_GetRegions(array('country_id' => $oGeoTarget->getCountryId()),
                     array('sort' => 'asc'), 1, 500);
@@ -74,6 +90,10 @@ class PluginAd_HookTopics extends Hook{
     }
 
     public function TopicEditAfter($aParams) {
+        
+        if($aParams['oTopic']->getType() !== 'ad'){
+            return false;
+        }
         
         $oTopic = $this->AttachCategory($aParams['oTopic']);
         
