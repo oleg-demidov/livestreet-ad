@@ -1,0 +1,12 @@
+{
+    "name": "breadcrumbs-categories",
+    "version": "1.0.0",
+    "dependencies": {
+    },
+    "templates": {
+        "breadcrumbs-categories":"breadcrumbs-categories.tpl"
+    },
+    "styles": {
+        "breadcrumbs-categories":"css/breadcrumbs-categories.css"
+    }
+}

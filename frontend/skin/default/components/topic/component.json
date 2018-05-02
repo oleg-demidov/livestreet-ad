@@ -4,10 +4,12 @@
         "type-ad-form": "topic-add-type-ad-form.tpl",
         "type-ad-contact":"topic-add-type-ad-contact.tpl",
         "ad-search-form":"ad-search-form.tpl",
-        "block-ad-search":"block.topic-ad-search.tpl",
+        "block.ad-search":"blocks/block-topic-ad-search.tpl",
+        "block.ad-tags":"blocks/block-topic-ad-tags.tpl",
         "ad-list":"topic-list-type-ad.tpl"
     },
     "scripts": {
-        "ad-form":"js/topic-ad-form.js"
+        "ad-form":"js/topic-ad-form.js",
+        "ad-tags":"js/topic-ad-tags.js"
     }
 }
