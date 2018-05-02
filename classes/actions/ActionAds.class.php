@@ -134,13 +134,23 @@ class PluginAd_ActionAds extends ActionPlugin
     
     public function _getRequestAllow() {
         $aRequestAllows = [
+            'text'
+        ];
+        $aRequest=[];
+        foreach($aRequestAllows as $sRequestAllow){
+            if($val = getRequest($sRequestAllow)){
+                $aRequest[$sRequestAllow] = $val;
+            }
+        }
+        return $aRequest;
+    }
+    
+    public function _getRequest() {
+        $aRequestAllows = [
             'text',
-            //'categories',
-            'country',
-            'region',
-            'city',
-            'query',
-            'sort_by'
+            'categories',
+            'geo',
+            'page'            
         ];
         $aRequest=[];
         foreach($aRequestAllows as $sRequestAllow){

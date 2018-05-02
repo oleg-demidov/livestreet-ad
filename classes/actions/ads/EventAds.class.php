@@ -126,6 +126,8 @@ class PluginAd_ActionAds_EventAds extends Event {
         $this->Viewer_AssignAjax('breadcrumbs', $this->getBreadcrumbs(isset($aFilter['categories'])?$aFilter['categories']:[]) );*/
         
         $this->Viewer_AssignAjax('sBaseUrl', $sBaseUrl );
+        $this->Viewer_AssignAjax('requestAllow', $this->_getRequestAllow() );
+        $this->Viewer_AssignAjax('request', $this->_getRequest() );
         $this->Viewer_AssignAjax('iPage', $aFilter['#page'] );
         $this->Viewer_AssignAjax('searchCount', $aAds['count']);
         $this->Viewer_AssignAjax('sTitle',  $sTitle);
@@ -182,7 +184,7 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         //print_r($oTopics);
    
-        return $oTopics;//$this->User_GetUsersByFilter($aFilter, $aOrder, $aFilter['page'] ,$this->countOnPage,$aAllowData );        
+        return $oTopics;
         
     }
     
@@ -195,7 +197,10 @@ class PluginAd_ActionAds_EventAds extends Event {
          * Формируем регулярное выражение для поиска
          */
         $sRegexp = $this->Search_GetRegexpForWords($aWords);
-        $Text = "%$Text%";
+        if(!$sRegexp){
+            return false;
+        }
+       // $Text = "%$Text%";
         $aTopics = $this->Topic_GetTopicItemsByFilter([
             '#select'       => ['t.topic_id'],
             '#index-from'   => 'topic_id',

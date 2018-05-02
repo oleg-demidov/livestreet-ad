@@ -76,18 +76,19 @@ jQuery(document).ready(function($){
             }
         ],
         afterupdate: function ( event, data ) {
-            $('.js-pagination-topics-ad').lsPaginationAjax();
-            //data.context.getElement( 'more' ).lsMore( 'option', 'params.next_page', 2 );
+            paginationAjax();
         }
     });
     
     /*
      * Ajax пагинация
      */
-    $('.js-pagination-topics-ad').lsPaginationAjax({
-        pagechanged: function(data, pageNumber){ console.log(data, pageNumber);
-            $( '.js-search-ajax-ads' ).lsSearchAjax('update', {page:pageNumber});
-        }
-    });
+    function paginationAjax(){
+        $('.js-pagination-topics-ad').on('click', function(e){
+            $( '.js-search-ajax-ads' ).lsSearchAjax('update', {page:$(e.target).html()});
+            return false;
+        })
+    }
+    paginationAjax();
     
 });
