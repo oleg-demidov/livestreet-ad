@@ -30,7 +30,8 @@ $config['$root$']['block']['ads_search'] = array(
     'action' => array('masters'),
     'blocks' => array(
         'right' => array(
-            'component@ad:topic.block-topic-ad-search'   => array('priority' => 300, 'plugin' => 'ad')
+            'component@ad:topic.block.ad-search'   => array('priority' => 300, 'plugin' => 'ad'),
+            'component@ad:topic.block.ad-tags'   => array('priority' => 30)
         )
     )
 );

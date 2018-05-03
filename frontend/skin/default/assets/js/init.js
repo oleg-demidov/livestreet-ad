@@ -22,7 +22,9 @@ jQuery(document).ready(function($){
     
     $('.js-category-tree').flFieldCategoryTree(); 
     
-    
+    $('.js-block-ad-tags').topicAdTags({
+        text_field:".topic-ad-search-form-text input"
+    });
     
     
     /*

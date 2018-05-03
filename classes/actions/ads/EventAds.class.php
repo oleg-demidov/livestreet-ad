@@ -29,8 +29,11 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         if($sQuery = getRequest('query')){
             $aFilter['name'] = "%{$sQuery}%";
-        }        
+        }  
         
+        if( isset($aFilter['categories']) ){
+            $this->Viewer_Assign('categories', $aFilter['categories'] );
+        }
 
         $aAds = $this->getAdsByFilter($aFilter);        
         
@@ -50,6 +53,16 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         $aCategories = $this->Category_GetCategoriesTreeByTargetType('specialization');        
         $this->Viewer_Assign('aCategories', $aCategories);
+        
+        $aAdTags = $this->Topic_GetTopicTagItemsByFilter([
+            '#select' => ['t.topic_tag_id', 'topic_tag_text'],
+            '#index-from' => 'topic_tag_id',
+            '#join' => [
+                "JOIN " . Config::Get('db.table.topic') . " tc ON tc.topic_id = t.topic_id AND tc.topic_type = 'ad' "
+            ]
+        ]);
+        $this->Viewer_Assign('tags', $aAdTags );
+        
         $this->AssignGeo();
         $this->Viewer_Assign('sBaseUrl', $sBaseUrl );        
         $this->Viewer_Assign('aAds',$aAds['collection'] ); 
@@ -84,6 +97,8 @@ class PluginAd_ActionAds_EventAds extends Event {
         $this->Viewer_SetResponseAjax('json');
         
         $aFilter = $this->_getFilterByRequest();
+        
+        $this->Viewer_AssignAjax('categories', $aFilter['categories'] );
         
         $aAds = $this->getAdsByFilter($aFilter);
         
@@ -121,9 +136,9 @@ class PluginAd_ActionAds_EventAds extends Event {
         }else{
             $aUsers = $this->PluginYmaps_Geo_GetUsersWithGeo($aMasters['collection']);
             $this->Viewer_AssignAjax('users', $aUsers);
-        }
+        }*/
         
-        $this->Viewer_AssignAjax('breadcrumbs', $this->getBreadcrumbs(isset($aFilter['categories'])?$aFilter['categories']:[]) );*/
+        
         
         $this->Viewer_AssignAjax('sBaseUrl', $sBaseUrl );
         $this->Viewer_AssignAjax('requestAllow', $this->_getRequestAllow() );
@@ -140,18 +155,19 @@ class PluginAd_ActionAds_EventAds extends Event {
         }
         $oViewer = $this->Viewer_GetLocalViewer();
         $oViewer->Assign('aCategories',$aCategories, true);
-        return $oViewer->Fetch("component@freelancer:search-form.breadcrumbs");
+        return $oViewer->Fetch("component@ad:breadcrumbs");
     }
     
     public function getAdsByFilter($aFilter) {
         
         $aFilter['#with'] = [];
         $aFilter['#index-from'] = 'topic_id';
+        $aFilter['topic_type'] = 'ad';
         //$aFilter['#select'] = ['topic_id', 'user_login','user_profile_avatar', 'user_rating'];
         
         if(isset($aFilter['categories']) and sizeof($aFilter['categories'])){
             $aCategoryIds = array_keys($aFilter['categories']);
-            $aFilter['#category'] = end($aCategoryIds);
+            $aFilter['#category'] = $this->Category_GetCategoriesIdByCategory(end($aCategoryIds), true);
             unset($aFilter['categories']);
             $aFilter['#with'][] = 'category'; 
         }
@@ -207,13 +223,16 @@ class PluginAd_ActionAds_EventAds extends Event {
             'topic_type'    => 'ad',
             'topic_publish' => 1,
             '#where'        => [
-                " ((LOWER(t.topic_title) REGEXP ?) OR (LOWER(tc.topic_text) REGEXP ?))"=> [$sRegexp, $sRegexp]
+                " ((LOWER(t.topic_title) REGEXP ?) OR (LOWER(tc.topic_text) REGEXP ?) OR (LOWER(tg.topic_tag_text) REGEXP ?))"
+                => [$sRegexp, $sRegexp, $sRegexp]
             ],
             '#join'         => [
-                "JOIN " . Config::Get('db.table.topic_content') . " tc ON tc.topic_id=t.topic_id" 
+                "JOIN " . Config::Get('db.table.topic_content') . " tc ON tc.topic_id=t.topic_id",
+                "LEFT JOIN " . Config::Get('db.table.topic_tag') . " tg ON tg.topic_id=t.topic_id "
             ]
         ]);
         
         return array_keys($aTopics);
     }
+    
 }

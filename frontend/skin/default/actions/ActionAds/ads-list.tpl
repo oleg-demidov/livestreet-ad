@@ -1,6 +1,8 @@
 {extends 'layouts/layout.base.tpl'}
     
 {block 'layout_content_header' append}
+    {component 'ad:breadcrumbs-categories' categories=$categories}
+    
     <div class="js-search-ajax-ads">
         {component 'ad:topic.ad-search-form'}
         <div class="js-search-ad-results-count">{lang 'plugin.ad.ad.search_form.count_results' count=$iAdsCount plural=true}</div>
