@@ -38,8 +38,8 @@
            value="{$chooseName}" data-show-dropdown="{$showDropdown}" autocomplete="off">
     {if $chooseId}
         <input type="hidden" name="categories[]" value="{$chooseId}" class="appended-category appended-category-id" />
-        <input type="hidden" name="category_url_full" value="{$chooseUrlFull}" class="appended-category appended-category-url" />
     {/if}
+    <input type="hidden" name="category_url_full" value="{$chooseUrlFull}" class="appended-category appended-category-url" />
     
     {$aItems = [["text" => {lang 'plugin.ymaps.loading'}, "classes" => 'ls-loading']]} 
     

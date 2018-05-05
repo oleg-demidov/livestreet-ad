@@ -62,12 +62,17 @@ class PluginAd_ActionAds extends ActionPlugin
     }
     public function _getFilterByRequest() {
         $aFilter = [];
-        
-        if(getRequest('categories')){
+
+        if(getRequest('category_url_full')){
+            $aCategories = $this->_getCategoriesByUrlFull(getRequest('category_url_full'));
+            if(sizeof($aCategories)){
+                $aFilter['categories'] = $aCategories;
+            }
+        }elseif(getRequest('categories') ){
             $aCategories = $this->Category_GetCategoryItemsByFilter([
                 '#index-from' => 'id',
                 'id in' => getRequest('categories'),
-                '#select' => [ 'url_full', 'id']
+                '#select' => [ 'url_full', 'id', 'title']
             ]);
             $aFilter['categories'] = $aCategories;
         }        

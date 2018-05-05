@@ -33,6 +33,7 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         if( isset($aFilter['categories']) ){
             $this->Viewer_Assign('categories', $aFilter['categories'] );
+            $this->Viewer_Assign('breadcrumbs_items', $this->getBreadcrumbsItems( $aFilter['categories'] ) );
         }
 
         $aAds = $this->getAdsByFilter($aFilter);        
@@ -98,11 +99,14 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         $aFilter = $this->_getFilterByRequest();
         
-        $this->Viewer_AssignAjax('categories', $aFilter['categories'] );
+        $aBreadcrumbsHTML = null;
+        if( isset($aFilter['categories']) ){
+            $aBreadcrumbsHTML = $this->getBreadcrumbsHTML( $aFilter['categories'] );
+        }               
         
         $aAds = $this->getAdsByFilter($aFilter);
         
-        $sBaseUrl = Router::GetPath('masters/'.$this->_getUrlByFilter($aFilter));
+        $sBaseUrl = Router::GetPath($this->page.'/'.$this->_getUrlByFilter($aFilter));
         
         $sTitle = $this->Viewer_GetHtmlTitle();
         
@@ -139,7 +143,7 @@ class PluginAd_ActionAds_EventAds extends Event {
         }*/
         
         
-        
+        $this->Viewer_AssignAjax('breadcrumbs_html', $aBreadcrumbsHTML );
         $this->Viewer_AssignAjax('sBaseUrl', $sBaseUrl );
         $this->Viewer_AssignAjax('requestAllow', $this->_getRequestAllow() );
         $this->Viewer_AssignAjax('request', $this->_getRequest() );
@@ -149,12 +153,32 @@ class PluginAd_ActionAds_EventAds extends Event {
         
     }
     
-    public function getBreadcrumbs($aCategories) {
+    public function getBreadcrumbsItems($aCategories) {
         if(!sizeof($aCategories)){
-            return '';
+            return null;
         }
+        
+        $aItems = [];
+        foreach($aCategories as $oCategory){
+            $aItems[] = [
+                'text'  => $oCategory->getTitle(),
+                'url'   => Router::GetPath($this->page.'/'.$oCategory->getUrlFull())
+            ];
+        }
+            
+        return $aItems;
+    }
+    
+    public function getBreadcrumbsHTML($aCategories) {
+        if(!sizeof($aCategories)){
+            return null;
+        }
+        
+        $aItems = $this->getBreadcrumbsItems($aCategories);
+            
         $oViewer = $this->Viewer_GetLocalViewer();
-        $oViewer->Assign('aCategories',$aCategories, true);
+        $oViewer->Assign('items',$aItems, true);
+        $oViewer->Assign('classes', 'js-category-ad-breadcrumbs', true);
         return $oViewer->Fetch("component@ad:breadcrumbs");
     }
     
@@ -163,7 +187,7 @@ class PluginAd_ActionAds_EventAds extends Event {
         $aFilter['#with'] = [];
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
-        //$aFilter['#select'] = ['topic_id', 'user_login','user_profile_avatar', 'user_rating'];
+        //$aFilter['#select'] = ['t.topic_id'];
         
         if(isset($aFilter['categories']) and sizeof($aFilter['categories'])){
             $aCategoryIds = array_keys($aFilter['categories']);
@@ -192,15 +216,18 @@ class PluginAd_ActionAds_EventAds extends Event {
             }
         }
         
-        $this->Logger_Notice(serialize($aFilter). getRequest('text'));
+        //$this->Logger_Notice(print_r($aFilter, true). getRequest('text'));
         
-        $oTopics = $this->Topic_GetTopicItemsByFilter($aFilter);
         
-        $this->Topic_AttachGeoTargets($oTopics['collection']);
+        $aTopics = $this->Topic_GetTopicItemsByFilter($aFilter);
+        //$this->Logger_Notice(print_r($oTopics, true));
+        $this->Topic_AttachGeoTargets($aTopics['collection']);
         
-        //print_r($oTopics);
-   
-        return $oTopics;
+        $aTopics['collection'] = $this->Topic_GetTopicsAdditionalData(array_keys($aTopics['collection']));
+        
+        $this->Category_AttachCategoriesForTargetItems($aTopics['collection'], 'specialization');
+        
+        return $aTopics;
         
     }
     

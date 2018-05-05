@@ -56,6 +56,11 @@ jQuery(document).ready(function($){
                 selector: '.js-field-category'
             },
             {
+                type: 'text',
+                name: 'category_url_full',
+                selector: '.appended-category-url'
+            },
+            {
                 type: 'select',
                 name: 'categories[]',
                 selector: '.appended-category-id'
@@ -78,7 +83,9 @@ jQuery(document).ready(function($){
             }
         ],
         afterupdate: function ( event, data ) {
-            paginationAjax();
+            paginationAjax(); 
+            $('.js-category-ad-breadcrumbs').remove();
+            $('.layout-content').prepend( data.response.breadcrumbs_html );
         }
     });
     

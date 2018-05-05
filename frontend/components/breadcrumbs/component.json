@@ -1,0 +1,14 @@
+{
+    "name": "breadcrumbs",
+    "version": "1.0.0",
+    "dependencies": {
+    },
+    "templates": {
+        "breadcrumbs":"breadcrumbs.tpl"
+    },
+    "scripts": {
+    },
+    "styles": {
+        "breadcrumbs":"css/breadcrumbs.css"
+    }
+}

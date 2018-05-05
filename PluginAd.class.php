@@ -35,7 +35,7 @@ class PluginAd extends Plugin
         $this->Component_Add('ad:topic');
         $this->Component_Add('ad:dropdown-select');
         $this->Component_Add('ad:field');
-        $this->Component_Add('ad:breadcrumbs-categories');
+        $this->Component_Add('ad:breadcrumbs');
         $this->Viewer_AppendScript($sPath = Plugin::GetTemplateWebPath('ad').'assets/js/init.js');
         
         $this->Geo_AddTargetType('topic');

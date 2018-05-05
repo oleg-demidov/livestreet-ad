@@ -1,7 +1,7 @@
 {extends 'layouts/layout.base.tpl'}
     
 {block 'layout_content_header' append}
-    {component 'ad:breadcrumbs-categories' categories=$categories}
+    {component 'ad:breadcrumbs' items=$breadcrumbs_items classes="js-category-ad-breadcrumbs"}
     
     <div class="js-search-ajax-ads">
         {component 'ad:topic.ad-search-form'}
