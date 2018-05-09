@@ -17,6 +17,8 @@ class PluginAd_HookTopics extends Hook{
         //$this->AddHook('topic_edit_validate_before', 'TopicValidateBefore');
         $this->AddHook('topic_edit_after', 'TopicEditAfter');
         $this->AddHook('topic_add_after', 'TopicEditAfter');
+        
+        $this->AddHook('topic_show', 'TopicShow');
     }
 
     
@@ -141,6 +143,17 @@ class PluginAd_HookTopics extends Hook{
             'validate_only_without_children' => true
         ]);
         return $oTopic;
+    }
+    
+    public function TopicShow($aParams) {
+        $oUserProfile = $aParams['oTopic']->getUser();
+        $this->Viewer_Assign('oUserProfile', $oUserProfile);
+        
+        $oUserCurrent = $this->User_GetUserCurrent();
+        $this->Viewer_Assign('oUserCurrent', $oUserCurrent);
+        
+        $iCount = $this->Topic_GetCountFromTopicReadByFilter(['topic_id' => $aParams['oTopic']->getId()]);
+        $aParams['oTopic']->setCountRead($iCount);
     }
     
 }

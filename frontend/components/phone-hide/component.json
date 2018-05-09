@@ -1,0 +1,17 @@
+{
+    "name": "phone-hide",
+    "version": "1.0.0",
+    "dependencies": {
+        "freelancer:user":"*"
+    },
+    "templates": {
+        "phone-hide":"phone-hide.tpl"
+    },
+    "scripts": {
+        "phone-hide":"js/phone-hide.js",
+        "init":"js/init.js"
+    },
+    "styles": {
+        "phone-hide":"css/phone-hide.css"
+    }
+}

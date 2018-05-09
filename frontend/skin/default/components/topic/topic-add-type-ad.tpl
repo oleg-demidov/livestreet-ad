@@ -1,5 +1,7 @@
 {component_define_params params=[ 'topic', 'type', 'skipBlogs', 'blogs', 'classes' ]}
 
+
+
 <form action="" method="POST" enctype="multipart/form-data" id="topic-add-form" class="{$classes} js-form-validate js-form-validate-ad" data-content-action="{( $topic ) ? 'edit' : 'add'}">
 
 {component 'tabs' classes='js-topic-category' tabs=[
@@ -22,6 +24,11 @@
         classes => 'form-tab',
         text => {$aLang.plugin.ad.ad.form.tab_form_title}, 
         content => {component 'ad:topic.type-ad-form' params=$params } 
+    ],
+    [ 
+        classes => 'form-imageset',
+        text => {$aLang.plugin.ad.ad.form.tab_properties_title}, 
+        content => {component 'ad:topic.type-ad-imageset' params=$params } 
     ],
     [ 
         classes => 'contacts-tab',

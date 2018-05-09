@@ -9,7 +9,8 @@ return [
     'ad' => [
         'form' => [
             'tab_specialization_title' => 'Выбрать специализацию',
-            'tab_form_title' => 'Заполнить поля',
+            'tab_form_title' => 'Описание',
+            'tab_properties_title' => 'Дополнительно',
             'tab_contact_title' => 'Контакты'
         ],
         'search_form' => [
@@ -24,7 +25,12 @@ return [
             'button' => [
                 'text' => 'Найти'
             ]
-        ]
+        ],
+        'block_alike_topics' => [
+            'title' => 'Похожие объявления',
+            
+        ],
+        'count_read' => 'Просмотров'
     ],
     'category' => [
         'name'  => 'Специализация'

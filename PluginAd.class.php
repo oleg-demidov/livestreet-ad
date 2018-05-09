@@ -20,11 +20,15 @@ class PluginAd extends Plugin
             'ModuleGeo' => '_ModuleGeo',
             'ModuleTopic' => '_ModuleTopic'
         ),
+        'action' => array(
+            'ActionAjax' => '_ActionAjax'
+        ),
 //        'entity'=>[
 //            'ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'
 //        ],
         'template' => array(
-            'component.topic.add-type' => '_components/topic/topic-add-type.tpl'
+            'component.topic.topic-add-type-ad' => '_components/topic/topic-add-type-ad.tpl',
+            'component.topic.topic-type-ad' => '_components/topic/topic-type-ad.tpl'
         ),
         //'entity' =>array('ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'),
     );
@@ -33,9 +37,9 @@ class PluginAd extends Plugin
     {
         $this->Component_Add('ad:category-tabs');
         $this->Component_Add('ad:topic');
-        $this->Component_Add('ad:dropdown-select');
         $this->Component_Add('ad:field');
         $this->Component_Add('ad:breadcrumbs');
+        $this->Component_Add('ad:phone-hide');
         $this->Viewer_AppendScript($sPath = Plugin::GetTemplateWebPath('ad').'assets/js/init.js');
         
         $this->Geo_AddTargetType('topic');
@@ -44,6 +48,26 @@ class PluginAd extends Plugin
     public function Activate()
     {
         $this->Category_CreateTargetType('specialization', 'Специализации', array(), true);
+        
+        $aProperties = array(
+            array(
+                'data'=>array(
+                'type'=>ModuleProperty::PROPERTY_TYPE_IMAGESET,
+                'title'=>'Фотосет',
+                'code'=>'fotoset',
+                'sort'=>100
+            ),
+            'validate_rule'=>array(
+                'count_min' => 1,
+                'count_max' => 10
+            ),
+            'params'=>array(
+                'size' => '100x100crop'
+            ),
+            'additional'=>array()
+            )
+        );
+        $this->Property_CreateDefaultTargetPropertyFromPlugin($aProperties, 'topic_ad');
         return true;
     }
 

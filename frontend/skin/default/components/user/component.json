@@ -1,0 +1,9 @@
+{
+    
+    "templates": {
+        "block.contacts":"blocks/block-contacts.tpl"
+    },
+    "scripts": {
+        
+    }
+}

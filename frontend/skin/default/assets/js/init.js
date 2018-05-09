@@ -83,6 +83,7 @@ jQuery(document).ready(function($){
             }
         ],
         afterupdate: function ( event, data ) {
+            $( '.js-topic' ).lsTopic();
             paginationAjax(); 
             $('.js-category-ad-breadcrumbs').remove();
             $('.layout-content').prepend( data.response.breadcrumbs_html );
@@ -100,4 +101,8 @@ jQuery(document).ready(function($){
     }
     paginationAjax();
     
+    /*
+     * Topic ad
+     */
+    $('.fl-phone-hide-linkshow').phoneHide();
 });

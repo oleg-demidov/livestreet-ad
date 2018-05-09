@@ -1,16 +1,25 @@
 {
     "templates": {
-        "add-type-ad": "topic-add-type-ad.tpl",
         "type-ad-form": "topic-add-type-ad-form.tpl",
+        "type-ad-imageset":"topic-add-type-ad-imageset.tpl",
         "type-ad-contact":"topic-add-type-ad-contact.tpl",
+        
         "ad-search-form":"ad-search-form.tpl",
+        
         "block.ad-search":"blocks/block-topic-ad-search.tpl",
         "block.ad-tags":"blocks/block-topic-ad-tags.tpl",
+        "block.user-author":"blocks/block.user-author.tpl",
+        "block.alike-topics":"blocks/block.alike-topics.tpl",
+        "block.alike-topics-list":"blocks/block.alike-topics-list.tpl",
+        
         "ad-list":"topic-list-type-ad.tpl",
         "ad-item":"topic-list-item-type-ad.tpl"
     },
     "scripts": {
         "ad-form":"js/topic-ad-form.js",
         "ad-tags":"js/topic-ad-tags.js"
+    },
+    "styles":{
+        "topic-ad":"css/topic-ad.css"
     }
 }
