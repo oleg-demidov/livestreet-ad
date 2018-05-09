@@ -2,11 +2,13 @@
  * Контакты
  *}
 {if $topic and $topic->getType() == 'ad'}
+    {$isEmty = 1}
     {$items = []}
     {$userfields = $oUserProfile->getUserFieldValues(true, array('contact', 'social'))}
 
     {foreach $userfields as $field}
         {if $field->getName() == 'phone'}
+            {$isEmty = 0}
             {$items[] = [
                 'label'   => $field->getTitle()|escape,
                 'content' => {component 'ad:phone-hide' oField=$field}
@@ -21,6 +23,14 @@
 
     {/foreach}
 
-    {component 'block' title={lang name='user.profile.contact'} content={component 'user' template='info-group' name='contact'  items=$items}}
+    {capture 'content'}
+        {if $isEmty}
+            {component 'blankslate' title={lang 'plugin.ad.ad.block_contacts.blankslate.title'}}
+        {else}
+            {component 'user' template='info-group' name='contact'  items=$items}
+        {/if}
+    {/capture}
+    
+    {component 'block' title={lang name='user.profile.contact'} content=$smarty.capture.content}
 
 {/if}

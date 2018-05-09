@@ -18,7 +18,7 @@ class PluginAd_BlockAlikeTopics extends Block
             'class' => 'ModuleCategory_BehaviorEntity',
             'target_type' => 'specialization'
         ]);
-        $aFilter['categories'] = $oTopic->category->getCategories();        
+        $aFilter['categories'] = $oTopic->category->getCategories();
         
         $oGeoObject = $this->Geo_GetGeoObjectByTarget('topic', $oTopic->getId());
         $aFilter['geo_object'] = $oGeoObject;

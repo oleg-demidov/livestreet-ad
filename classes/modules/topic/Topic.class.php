@@ -32,14 +32,17 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
         //$aFilter['#select'] = ['t.topic_id'];
-        
-        if(isset($aFilter['categories']) and sizeof($aFilter['categories'])){
+                
+        if(isset($aFilter['categories']) and is_array($aFilter['categories'])){
             $aCategoryIds = [];
             foreach($aFilter['categories'] as $oCategory){
                 $aCategoryIds[] = $oCategory->getId();
             } 
+
+            if(sizeof($aCategoryIds)){
+                $aFilter['#category'] = $this->Category_GetCategoriesIdByCategory(end($aCategoryIds), true);
+            }
             
-            $aFilter['#category'] = $this->Category_GetCategoriesIdByCategory(end($aCategoryIds), true);
             unset($aFilter['categories']);
             $aFilter['#with'][] = 'category'; 
         }
@@ -64,7 +67,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-        //$this->Logger_Notice(print_r($aFilter, true));        
+//        $this->Logger_Notice(print_r($aFilter, true));        
         
         $aTopics = $this->GetTopicItemsByFilter($aFilter);
 
@@ -78,6 +81,37 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         
         return $aTopics;
         
+    }
+    
+    public function GetTopicIdsByText($Text) {
+        /**
+         * Получаем список слов для поиска
+         */
+        $aWords = $this->Search_GetWordsForSearch(mb_strtolower($Text,"utf-8"));
+        /**
+         * Формируем регулярное выражение для поиска
+         */
+        $sRegexp = $this->Search_GetRegexpForWords($aWords);
+        if(!$sRegexp){
+            return false;
+        }
+       // $Text = "%$Text%";
+        $aTopics = $this->GetTopicItemsByFilter([
+            '#select'       => ['t.topic_id'],
+            '#index-from'   => 'topic_id',
+            'topic_type'    => 'ad',
+            'topic_publish' => 1,
+            '#where'        => [
+                " ((LOWER(t.topic_title) REGEXP ?) OR (LOWER(tc.topic_text) REGEXP ?) OR (LOWER(tg.topic_tag_text) REGEXP ?))"
+                => [$sRegexp, $sRegexp, $sRegexp]
+            ],
+            '#join'         => [
+                "JOIN " . Config::Get('db.table.topic_content') . " tc ON tc.topic_id=t.topic_id",
+                "LEFT JOIN " . Config::Get('db.table.topic_tag') . " tg ON tg.topic_id=t.topic_id "
+            ]
+        ]);
+        
+        return array_keys($aTopics);
     }
     
 }

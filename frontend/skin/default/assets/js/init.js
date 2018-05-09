@@ -101,6 +101,9 @@ jQuery(document).ready(function($){
     }
     paginationAjax();
     
+    $('.js-topic-ad-search-form-order').lsDropdown({
+        selectable:true
+    });
     /*
      * Topic ad
      */

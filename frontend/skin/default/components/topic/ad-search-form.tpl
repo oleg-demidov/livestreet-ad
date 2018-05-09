@@ -8,5 +8,12 @@
         name="text"
         classes="{$component}-text"
         label=$aLang.plugin.ad.ad.search_form.text.label}
+        
+    
+        
+    {component 'dropdown' 
+        menu=$aItemsDropdown
+        classes="js-{$component}-order"
+        label=$aLang.plugin.ad.ad.search_form.text.label}
 </form>
 

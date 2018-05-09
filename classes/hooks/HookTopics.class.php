@@ -154,6 +154,8 @@ class PluginAd_HookTopics extends Hook{
         
         $iCount = $this->Topic_GetCountFromTopicReadByFilter(['topic_id' => $aParams['oTopic']->getId()]);
         $aParams['oTopic']->setCountRead($iCount);
+        
+        
     }
     
 }

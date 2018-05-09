@@ -26,6 +26,11 @@ return [
                 'text' => 'Найти'
             ]
         ],
+        'block_contacts' => [
+            'blankslate' => [
+                'title' => 'Контактов нет'
+            ]
+        ],
         'block_alike_topics' => [
             'title' => 'Похожие объявления',
             

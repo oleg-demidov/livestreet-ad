@@ -22,6 +22,18 @@ class PluginAd_ActionAds_EventAds extends Event {
             
             Router::Location(Router::GetPath($url) . $sRequest);
         }
+        
+        $aItemsDropdown = [
+            [
+                'text' => '1'
+            ],
+            [
+                'text' => '2'
+            ],
+            [
+                'text' => '3'
+            ]
+        ];
                
         $this->SetTemplateAction('ads-list');
         
@@ -65,6 +77,8 @@ class PluginAd_ActionAds_EventAds extends Event {
         $this->Viewer_Assign('tags', $aAdTags );
         
         $this->AssignGeo();
+        $this->Viewer_Assign('aItemsDropdown', $aItemsDropdown);
+        $this->Viewer_Assign('sMenuHeadItemSelect', 'masters');
         $this->Viewer_Assign('sBaseUrl', $sBaseUrl );        
         $this->Viewer_Assign('aAds',$aAds['collection'] ); 
         $this->Viewer_Assign('iAdsCount',$aAds['count'] );
@@ -183,35 +197,6 @@ class PluginAd_ActionAds_EventAds extends Event {
     }
     
     
-    public function GetTopicIdsByText($Text) {
-        /**
-         * Получаем список слов для поиска
-         */
-        $aWords = $this->Search_GetWordsForSearch(mb_strtolower($Text,"utf-8"));
-        /**
-         * Формируем регулярное выражение для поиска
-         */
-        $sRegexp = $this->Search_GetRegexpForWords($aWords);
-        if(!$sRegexp){
-            return false;
-        }
-       // $Text = "%$Text%";
-        $aTopics = $this->Topic_GetTopicItemsByFilter([
-            '#select'       => ['t.topic_id'],
-            '#index-from'   => 'topic_id',
-            'topic_type'    => 'ad',
-            'topic_publish' => 1,
-            '#where'        => [
-                " ((LOWER(t.topic_title) REGEXP ?) OR (LOWER(tc.topic_text) REGEXP ?) OR (LOWER(tg.topic_tag_text) REGEXP ?))"
-                => [$sRegexp, $sRegexp, $sRegexp]
-            ],
-            '#join'         => [
-                "JOIN " . Config::Get('db.table.topic_content') . " tc ON tc.topic_id=t.topic_id",
-                "LEFT JOIN " . Config::Get('db.table.topic_tag') . " tg ON tg.topic_id=t.topic_id "
-            ]
-        ]);
-        
-        return array_keys($aTopics);
-    }
+    
     
 }

@@ -6,6 +6,7 @@ class PluginAd_HookMenu extends Hook{
     {
        
         $this->AddHook('template_nav_main', 'NavMain', null, 655);
+        $this->AddHook('viewer_init_assign', 'NavMainAssign');
         
     }
 
@@ -18,6 +19,20 @@ class PluginAd_HookMenu extends Hook{
         ]], $aParams['items']);
         return    $aResult;
 
+    }
+    
+    public function NavMainAssign($aParams) {        
+        if(Router::GetActionEventName() == 'topic'){
+            $iTopicId = substr(Router::GetActionEvent(), 0,-5);
+            $oTopic = $this->Topic_GetTopicByFilter([
+                'topic_id' => $iTopicId,
+                '#select'  => ['topic_type']
+            ]);
+            if( $oTopic->getType() == 'ad'){
+                $this->Viewer_Assign('sMenuHeadItemSelect', 'masters');
+            }
+        }
+        
     }
 
 }
