@@ -8,6 +8,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             'class'       => 'ModuleCategory_BehaviorModule',
             'target_type' => 'specialization',
         ),
+        'property' => 'ModuleProperty_BehaviorModule'
     );
     
     public function GetTopicItemsByFilter($aFilter)
@@ -67,9 +68,9 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-//        $this->Logger_Notice(print_r($aFilter, true));        
+        $this->Logger_Notice(print_r($aFilter, true));        
         
-        $aTopics = $this->GetTopicItemsByFilter($aFilter);
+        $aTopics = $this->GetTopicAdItemsByFilter($aFilter);
 
         $this->AttachGeoTargets($aTopics['collection']);
         

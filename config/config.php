@@ -9,6 +9,7 @@
 $config['router']['page'] = 'masters';
 
 $config['$root$']['router']['page'][$config['router']['page']] = 'PluginAd_ActionAds';
+$config['$root$']['db']['table']['topic_ad'] = '___db.table.prefix___topic';
 
 $config['acl'] = [
     'user' => [

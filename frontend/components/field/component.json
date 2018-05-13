@@ -3,7 +3,9 @@
     "templates": {
         "count":"field.count.tpl",
         "category-tree":"category-tree.tpl",
-        "query":"field.query.tpl"
+        "query":"field.query.tpl",
+        "sort":"field.sort.tpl",
+        "diapazon":"field.diapazon.tpl"
     },
     "scripts": {
         "count":"js/count.js",
@@ -12,6 +14,8 @@
     "styles": {
         "query":"css/query.css",
         "category-tree":"css/category-tree.css",
-    	"count":"css/count.css"
+    	"count":"css/count.css",
+        "sort":"css/sort.css",
+        "diapazon":"css/diapazon.css"
     }
 }

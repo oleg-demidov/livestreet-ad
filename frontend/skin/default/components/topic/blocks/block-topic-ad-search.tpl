@@ -29,6 +29,14 @@
             cities    = $aGeoCities
             place     = $oGeoTarget}
             
+        {* Цена от и до *}
+        {component 'ad:field' template='diapazon'
+            name      = 'price'
+            classes   = 'js-field-price'
+            label     = {lang name='plugin.ad.ad.block_search.price.label'}
+        }  
+            
+            
         {component 'button' classes="js-search-ajax-button" text={lang 'plugin.ad.ad.block_search.button.text'}}
         
     </form>

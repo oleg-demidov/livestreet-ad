@@ -1,0 +1,13 @@
+{
+    "name": "toggle-view",
+    "version": "1.0.0",
+    
+    "templates": {
+        "toggle-view":"toggle-view.tpl"
+    },
+    "scripts": {
+        "toggle-view":"js/toggle-view.js"
+    },
+    "styles": {
+    }
+}

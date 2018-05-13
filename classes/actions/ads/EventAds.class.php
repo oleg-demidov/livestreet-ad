@@ -25,13 +25,16 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         $aItemsDropdown = [
             [
-                'text' => '1'
+                'text' => $this->Lang_Get('plugin.ad.ad.search_form.sort.items.by_price'),
+                'name' => 'prop:price'
             ],
             [
-                'text' => '2'
+                'text' => $this->Lang_Get('plugin.ad.ad.search_form.sort.items.by_rating'),
+                'name' => 'topic_rating'
             ],
             [
-                'text' => '3'
+                'text' => $this->Lang_Get('plugin.ad.ad.search_form.sort.items.by_date_publish'),
+                'name' => 'topic_date_publish'
             ]
         ];
                

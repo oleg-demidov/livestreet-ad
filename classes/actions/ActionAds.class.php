@@ -81,6 +81,26 @@ class PluginAd_ActionAds extends ActionPlugin
             $aFilter['geo_object'] = $oGeo;
         }
         
+        $sOrderWay = in_array(getRequestStr('order'), array('desc', 'asc')) ? getRequestStr('order') : 'desc';
+        $sOrderField = in_array(getRequestStr('sort_by'), array(
+            'topic_rating',
+            'topic_date_publish',
+            'prop:price'
+        )) ? getRequestStr('sort_by') : 'topic_rating';        
+        $aFilter['#order'] = [
+            $sOrderField => $sOrderWay
+        ];
+        if($sOrderField == 'prop:price'){
+            $aFilter['#prop:price !='] = -1;
+        }
+        
+        if(($iPriceFrom = getRequest('price_from')) !== ''){
+            $aFilter['#prop:price >'] = $iPriceFrom;
+        }
+        if(($iPriceTo = getRequest('price_to')) !== ''){
+            $aFilter['#prop:price <'] = $iPriceTo;
+        }
+        
         $aFilter['#page'] = getRequest('page', 1);
         
         return $aFilter;

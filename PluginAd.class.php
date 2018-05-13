@@ -23,9 +23,9 @@ class PluginAd extends Plugin
         'action' => array(
             'ActionAjax' => '_ActionAjax'
         ),
-//        'entity'=>[
-//            'ModuleCategory_EntityCategory' => '_ModuleCategory_EntityCategory'
-//        ],
+        'entity'=>[
+            'ModuleTopic_EntityTopicAd' => '_ModuleTopic_EntityTopicAd'
+        ],
         'template' => array(
             'component.topic.topic-add-type-ad' => '_components/topic/topic-add-type-ad.tpl',
             'component.topic.topic-type-ad' => '_components/topic/topic-type-ad.tpl'
@@ -55,16 +55,33 @@ class PluginAd extends Plugin
                 'type'=>ModuleProperty::PROPERTY_TYPE_IMAGESET,
                 'title'=>'Фотосет',
                 'code'=>'fotoset',
-                'sort'=>100
+                'sort'=>2
+                ),
+                'validate_rule'=>array(
+                    'count_min' => 1,
+                    'count_max' => 10
+                ),
+                'params'=>array(
+                    'size' => '100x100crop'
+                ),
+                'additional'=>array()
             ),
-            'validate_rule'=>array(
-                'count_min' => 1,
-                'count_max' => 10
-            ),
-            'params'=>array(
-                'size' => '100x100crop'
-            ),
-            'additional'=>array()
+            array(
+                'data'=>array(
+                'type'=>ModuleProperty::PROPERTY_TYPE_FLOAT,
+                'title'=>'Цена',
+                'code'=>'price',
+                'sort'=>1
+                ),
+                'validate_rule'=>array(
+                    'min' => 0,
+                    'max' => 100000000.0,
+                    'allowEmpty' => true
+                ),
+                'params'=>array(
+                    'default' => 0
+                ),
+                'additional'=>array()
             )
         );
         $this->Property_CreateDefaultTargetPropertyFromPlugin($aProperties, 'topic_ad');

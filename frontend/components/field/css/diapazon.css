@@ -1,0 +1,6 @@
+.field-diapazon-row .ls-grid-col input{
+    max-width: 80%;
+}
+.field-diapazon-row .ls-grid-col:last-child{
+    text-align: right;
+}

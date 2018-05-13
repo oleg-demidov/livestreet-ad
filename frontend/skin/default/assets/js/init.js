@@ -51,6 +51,16 @@ jQuery(document).ready(function($){
                 selector: '.topic-ad-search-form-text input'
             },
             {
+                type: 'text',
+                name: 'price_from',
+                selector: '.js-field-price .field-diapazon-input-from'
+            },
+            {
+                type: 'text',
+                name: 'price_to',
+                selector: '.js-field-price .field-diapazon-input-to'
+            },
+            {
                 type: 'select',
                 name: 'category',
                 selector: '.js-field-category'
@@ -67,19 +77,24 @@ jQuery(document).ready(function($){
             },
             
             {
-                type: 'select',
+                type: 'text',
                 name: 'geo[country]',
                 selector: '.js-field-geo-country'
             },
             {
-                type: 'select',
+                type: 'text',
                 name: 'geo[region]',
                 selector: '.js-field-geo-region'
             },
             {
-                type: 'select',
+                type: 'text',
                 name: 'geo[city]',
                 selector: '.js-field-geo-city'
+            },
+            {
+                type: 'sort',
+                name: 'sort_by',
+                selector: '.js-search-sort-menu li'
             }
         ],
         afterupdate: function ( event, data ) {
@@ -89,6 +104,8 @@ jQuery(document).ready(function($){
             $('.layout-content').prepend( data.response.breadcrumbs_html );
         }
     });
+    
+    //console.log(ls.registry.get('ymapsOptions'))
     
     /*
      * Ajax пагинация
