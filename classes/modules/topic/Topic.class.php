@@ -29,7 +29,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
     
     public function GetAdsByFilter($aFilter) {
         
-        $aFilter['#with'] = [];
+        //$aFilter['#with'] = [];
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
         //$aFilter['#select'] = ['t.topic_id'];
@@ -68,7 +68,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-        $this->Logger_Notice(print_r($aFilter, true));        
+        //$this->Logger_Notice(print_r($aFilter, true));        
         
         $aTopics = $this->GetTopicAdItemsByFilter($aFilter);
 

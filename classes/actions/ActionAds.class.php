@@ -12,6 +12,7 @@ class PluginAd_ActionAds extends ActionPlugin
 
         $this->RegisterEventExternal('Ads', 'PluginAd_ActionAds_EventAds');
         $this->AddEventPreg( '/^ajax-search$/i', 'Ads::EventAdsAjax');
+        $this->AddEventPreg( '/^ajax-search-ads-map$/i', 'Ads::EventAdsToMapAjax');
         $this->AddEventPreg( '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
         $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));
         $this->AddEventPreg('/^[a-zA-Z0-9_]{1,50}/i', '/^[a-zA-Z0-9_]{1,50}/i', '/^(page([1-9]\d{0,5}))?$/i', array('Ads::EventAds', $this->page));

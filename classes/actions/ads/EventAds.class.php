@@ -137,34 +137,50 @@ class PluginAd_ActionAds_EventAds extends Event {
         $oViewer->Assign('topics',$aAds['collection'], true);
         $oViewer->Assign('paging',$aPaging, true);
         $oViewer->Assign('oUserCurrent',$this->oUserCurrent );
+        
         $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@ad:topic.ad-list"));
-        
-        
-        
-        /*if(!getRequest('bMap')){
-            $aPaging = $this->Viewer_MakePaging($aMasters['count'], $aFilter['page'], 
-                $this->countOnPage,
-                Config::Get('plugin.freelancer.poisk.count_page_line'), 
-                $sBaseUrl, []);
-
-            $oViewer = $this->Viewer_GetLocalViewer();
-            $oViewer->Assign('aMasters',$aMasters['collection'], true);
-            $oViewer->Assign('iMastersCount',$aMasters['count'], true );
-            $oViewer->Assign('aPaging',$aPaging , true);
-            $oViewer->Assign('oUserCurrent',$this->oUserCurrent );
-            $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@freelancer:master.page"));
-            $sTitle = $oViewer->GetHtmlTitle();
-        }else{
-            $aUsers = $this->PluginYmaps_Geo_GetUsersWithGeo($aMasters['collection']);
-            $this->Viewer_AssignAjax('users', $aUsers);
-        }*/
-        
-        
+                
         $this->Viewer_AssignAjax('breadcrumbs_html', $aBreadcrumbsHTML );
         $this->Viewer_AssignAjax('sBaseUrl', $sBaseUrl );
         $this->Viewer_AssignAjax('requestAllow', $this->_getRequestAllow() );
         $this->Viewer_AssignAjax('request', $this->_getRequest() );
         $this->Viewer_AssignAjax('iPage', $aFilter['#page'] );
+        $this->Viewer_AssignAjax('searchCount', $aAds['count']);
+        $this->Viewer_AssignAjax('sTitle',  $sTitle);
+        
+    }
+    
+    public function EventAdsToMapAjax() {
+        
+        $this->Viewer_SetResponseAjax('json');
+        
+        $aFilter = $this->_getFilterByRequest();
+        
+        $aFilter['#select'] = ['topic_id'];
+        $aFilter['#with']   = ['property'];
+        $aFilter['#page']   = [1, 10000];
+        
+        $aBreadcrumbsHTML = null;
+        if( isset($aFilter['categories']) ){
+            $aBreadcrumbsHTML = $this->getBreadcrumbsHTML( $aFilter['categories'] );
+        }               
+        
+        $aAds = $this->Topic_GetAdsByFilter($aFilter);
+        
+        $aAds['collection'] = $this->PluginYmaps_Geo_GetTopicsWithLocation($aAds['collection']);
+        
+        $sBaseUrl = Router::GetPath($this->page.'/'.$this->_getUrlByFilter($aFilter));
+        
+        $sTitle = $this->Viewer_GetHtmlTitle();        
+        
+        
+        $this->Viewer_AssignAjax('html', ''); 
+        $this->Viewer_AssignAjax('objects', $aAds['collection']);
+        $this->Viewer_AssignAjax('breadcrumbs_html', $aBreadcrumbsHTML );
+        $this->Viewer_AssignAjax('sBaseUrl', $sBaseUrl );
+        $this->Viewer_AssignAjax('requestAllow', $this->_getRequestAllow() );
+        $this->Viewer_AssignAjax('request', $this->_getRequest() );
+        $this->Viewer_AssignAjax('iPage', 1 );
         $this->Viewer_AssignAjax('searchCount', $aAds['count']);
         $this->Viewer_AssignAjax('sTitle',  $sTitle);
         
