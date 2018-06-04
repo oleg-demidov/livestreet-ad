@@ -53,7 +53,7 @@ class PluginAd_ActionAds extends ActionPlugin
             $aFilter['geo_object'] = $oGeo;
         }
         
-        $aCategories = $this->_getCategoriesByUrlFull(join('/',$aParams));
+        $aCategories = $this->Category_GetCategoriesByUrlFull(join('/',$aParams));
 
         if($aCategories and sizeof($aCategories)){
             $aFilter['categories'] = $aCategories;
@@ -65,7 +65,7 @@ class PluginAd_ActionAds extends ActionPlugin
         $aFilter = [];
 
         if(getRequest('category_url_full')){
-            $aCategories = $this->_getCategoriesByUrlFull(getRequest('category_url_full'));
+            $aCategories = $this->Category_GetCategoriesByUrlFull(getRequest('category_url_full'));
             if(sizeof($aCategories)){
                 $aFilter['categories'] = $aCategories;
             }
@@ -107,23 +107,23 @@ class PluginAd_ActionAds extends ActionPlugin
         return $aFilter;
     }
     
-    public function _getCategoriesByUrlFull($sUrl) {
-        if(!$sUrl){
-            return false;
-        }
-        $aUrls = explode('/', trim($sUrl));
-        $aUrlsField = [];
-        foreach($aUrls as $sUrl){
-            $aUrlsField[] = "'".$sUrl."'";
-        }
-        $aCategories = $this->Category_GetCategoryItemsByFilter([
-            '#index-from' => 'id',
-            'url in' => $aUrls,
-            '#select' => ['id', 'title', 'url_full', 'url'],
-            '#order' => ['field:url' => $aUrlsField]
-        ]);  
-        return $aCategories;        
-    }
+//    public function _getCategoriesByUrlFull($sUrl) {
+//        if(!$sUrl){
+//            return false;
+//        }
+//        $aUrls = explode('/', trim($sUrl));
+//        $aUrlsField = [];
+//        foreach($aUrls as $sUrl){
+//            $aUrlsField[] = "'".$sUrl."'";
+//        }
+//        $aCategories = $this->Category_GetCategoryItemsByFilter([
+//            '#index-from' => 'id',
+//            'url in' => $aUrls,
+//            '#select' => ['id', 'title', 'url_full', 'url'],
+//            '#order' => ['field:url' => $aUrlsField]
+//        ]);  
+//        return $aCategories;        
+//    }
     
     
     public function _getPage($aNumberLastParam) {

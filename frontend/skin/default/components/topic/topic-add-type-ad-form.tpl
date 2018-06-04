@@ -142,5 +142,5 @@
         {component 'field' template='hidden' name='topic[id]' value=$topic->getId()}
     {/if}
 
-
+{component 'button' type="button" text=$aLang.plugin.ad.ad.form.button_next mods="primary" classes="js-next-form"}
     

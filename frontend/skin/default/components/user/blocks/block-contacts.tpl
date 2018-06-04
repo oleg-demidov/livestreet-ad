@@ -27,8 +27,18 @@
         {if $isEmty}
             {component 'blankslate' title={lang 'plugin.ad.ad.block_contacts.blankslate.title'}}
         {else}
-            {component 'user' template='info-group' name='contact'  items=$items}
+            {component 'user' template='info-group' classes="user-contacts-list" name='contact'  items=$items}
         {/if}
+        
+        {if !$oUserCurrent}
+            {$classesBut = "js-modal-toggle-login"}
+        {/if}
+        
+        {component 'button' 
+            classes="user-contacts-talk-but {$classesBut}"
+            mods="large warning" 
+            url={router page="talk/add/?talk_recepient_id={$oUserProfile->getId()}"} 
+            text=$aLang.talk.send_message}
     {/capture}
     
     {component 'block' title={lang name='user.profile.contact'} content=$smarty.capture.content}

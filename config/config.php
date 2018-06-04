@@ -21,10 +21,15 @@ $config['acl'] = [
     ]
 ];
 
+$config['menu'] = [
+    'position' => 1
+];
+
 $config['topic'] = [
-    'count_page_line' => 2,
-    'per_page'  => 2,
-    'count_alike' => 5
+    'count_page_line' => 5,
+    'per_page'  => 10,
+    'count_alike' => 5,
+    'count_words_item' => 20
 ];
 
 
@@ -33,7 +38,8 @@ $config['$root$']['block']['ads_search'] = array(
     'blocks' => array(
         'right' => array(
             'component@ad:topic.block.ad-search'   => array('priority' => 2, 'plugin' => 'ad'),
-            'component@ad:topic.block.ad-tags'   => array('priority' => 1)
+            'component@ad:topic.block.ad-tags'   => array('priority' => 1),
+            'component@ad:topic.block.button-add'   => ['priority' => 11]
         )
     )
 );
@@ -44,10 +50,17 @@ $config['$root$']['block']['topic_ad'] = array(
         'right' => array(
             'component@ad:topic.block.user-author'   => array('priority' => 10),
             'component@user.block.actions'   => array('priority' => 9),
-            'component@ad:user.block.contacts'   => array('priority' => 8),
-            'component@ad:topic.block.alike-topics'   => ['priority' => 7]
+            'component@ad:user.block.contacts'   => array('priority' => 8)
         )
     )
 );
+
+$config['$root$']['block']['rule_topic_type'] = array(
+    'action' => array(
+        'content' => array('add2', 'edit2'),
+    )
+);
+
+
 
 return $config;

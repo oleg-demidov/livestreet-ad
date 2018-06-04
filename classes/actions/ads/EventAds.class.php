@@ -40,7 +40,18 @@ class PluginAd_ActionAds_EventAds extends Event {
                
         $this->SetTemplateAction('ads-list');
         
-        $aFilter = $this->_getFilterByParams();       
+        $aFilter = $this->_getFilterByParams(); 
+        
+        $oGeoTarget = Engine::GetEntity('Geo_Target');
+        if(isset($aFilter['geo_object'])){ 
+            $oGeoTarget->_setData( array_merge( [
+                'geo_type'  => $aFilter['geo_object']->getType(),
+                'geo_id'    => $aFilter['geo_object']->getId(),
+                $aFilter['geo_object']->getType().'_id'    => $aFilter['geo_object']->getId()
+            ], $aFilter['geo_object']->_getData()) );
+            $this->Viewer_Assign('oGeoTarget',$oGeoTarget ); 
+            
+        }
         
         if($sQuery = getRequest('query')){
             $aFilter['name'] = "%{$sQuery}%";
@@ -50,8 +61,10 @@ class PluginAd_ActionAds_EventAds extends Event {
             $this->Viewer_Assign('categories', $aFilter['categories'] );
             $this->Viewer_Assign('breadcrumbs_items', $this->getBreadcrumbsItems( $aFilter['categories'] ) );
         }
+        
+        $aFilter['#with'] = ['#category'];
 
-        $aAds = $this->Topic_GetAdsByFilter($aFilter);        
+        $aAds = $this->Topic_GetAdsByFilter($aFilter, ['geo', 'content' => ['properties', 'favourite']]);        
         
         $sBaseUrl = Router::GetPath('masters/'.$this->_getUrlByFilter($aFilter));
         
@@ -79,24 +92,27 @@ class PluginAd_ActionAds_EventAds extends Event {
         ]);
         $this->Viewer_Assign('tags', $aAdTags );
         
-        $this->AssignGeo();
+        $this->AssignGeo($oGeoTarget);
         $this->Viewer_Assign('aItemsDropdown', $aItemsDropdown);
         $this->Viewer_Assign('sMenuHeadItemSelect', 'masters');
         $this->Viewer_Assign('sBaseUrl', $sBaseUrl );        
         $this->Viewer_Assign('aAds',$aAds['collection'] ); 
+        if(isset($aAds['geo_objects'])){
+            $this->Viewer_Assign('aGeoObjects',$aAds['geo_objects'] );
+        }
         $this->Viewer_Assign('iAdsCount',$aAds['count'] );
         $this->Viewer_Assign('paging',$aPaging );
         $this->Viewer_AssignJs('url_search_ad', Config::Get('plugin.ad.router.page'));
         $this->Lang_AddLangJs('plugin.ad.ad.search_form.count_results');
     }
     
-    public function AssignGeo() {
+    public function AssignGeo($oGeoTarget) {
         /**
          * Загружаем в шаблон список стран, регионов, городов
          */
         $aCountries = $this->Geo_GetCountries(array(), array('sort' => 'asc'), 1, 300);
         $this->Viewer_Assign('aGeoCountries', $aCountries['collection']);
-        if (isset($oGeoTarget)) {
+        if ($oGeoTarget) {
             if ($oGeoTarget->getCountryId()) {
                 $aRegions = $this->Geo_GetRegions(array('country_id' => $oGeoTarget->getCountryId()),
                     array('sort' => 'asc'), 1, 500);
@@ -121,7 +137,9 @@ class PluginAd_ActionAds_EventAds extends Event {
             $aBreadcrumbsHTML = $this->getBreadcrumbsHTML( $aFilter['categories'] );
         }               
         
-        $aAds = $this->Topic_GetAdsByFilter($aFilter);
+        $aFilter['#with'] = ['#category'];
+        
+        $aAds = $this->Topic_GetAdsByFilter($aFilter, ['geo', 'content' => ['properties', 'favourite']]);
         
         $sBaseUrl = Router::GetPath($this->page.'/'.$this->_getUrlByFilter($aFilter));
         
@@ -137,6 +155,9 @@ class PluginAd_ActionAds_EventAds extends Event {
         $oViewer->Assign('topics',$aAds['collection'], true);
         $oViewer->Assign('paging',$aPaging, true);
         $oViewer->Assign('oUserCurrent',$this->oUserCurrent );
+        if(isset($aAds['geo_objects'])){
+            $this->Viewer_Assign('aGeoObjects',$aAds['geo_objects'], true );
+        }
         
         $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@ad:topic.ad-list"));
                 
@@ -156,8 +177,6 @@ class PluginAd_ActionAds_EventAds extends Event {
         
         $aFilter = $this->_getFilterByRequest();
         
-        $aFilter['#select'] = ['topic_id'];
-        $aFilter['#with']   = ['property'];
         $aFilter['#page']   = [1, 10000];
         
         $aBreadcrumbsHTML = null;
@@ -191,7 +210,13 @@ class PluginAd_ActionAds_EventAds extends Event {
             return null;
         }
         
-        $aItems = [];
+        $aItems = [
+            [
+                'text'  => $this->Lang_Get('plugin.ad.ad.breadcrumbs.first'),
+                'url'   => Router::GetPath($this->page)
+
+            ]
+        ];
         foreach($aCategories as $oCategory){
             $aItems[] = [
                 'text'  => $oCategory->getTitle(),

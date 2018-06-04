@@ -5,14 +5,6 @@
     <form  method="POST" class="{$component}" action="{router page="masters"}" > 
         {component "field.hidden" name="form" value="1"}        
             
-        {*component 'ymaps:fields.ajaxgeo' 
-            classes="js-search-form-geo"
-            label=$geoLabel 
-            place=$oGeoTarget
-            choosenGeo     = $oGeo*} 
-            
-        
-            
         {component 'ad:field.category-tree' 
             url = {router page="masters"}
             categoriesSelected = $specializationSelected
@@ -27,7 +19,7 @@
             countries = $aGeoCountries
             regions   = $aGeoRegions
             cities    = $aGeoCities
-            place     = $oGeoTarget}
+            place     = $oGeoTarget} 
             
         {* Цена от и до *}
         {component 'ad:field' template='diapazon'
@@ -37,7 +29,7 @@
         }  
             
             
-        {component 'button' classes="js-search-ajax-button" text={lang 'plugin.ad.ad.block_search.button.text'}}
+        {component 'button' classes="js-search-ajax-button" mods="primary" text={lang 'plugin.ad.ad.block_search.button.text'}}
         
     </form>
 {/capture}

@@ -4,8 +4,20 @@
 
 {if $topic and $topic->getType() == 'ad'}
  
-    {capture 'block_content'}
-        {component 'user.header' user=$oUserProfile mods="user-author"}
+    {capture 'block_content'}    
+        {$oUserTopic = $topic->getUser()}
+        <img class="topic-user-avatar" src="{$oUserTopic->getProfileFotoPath()}">
+        <center>
+            <h4>
+                <a href="{$oUserTopic->getUserWebPath()}">
+                    {if $oUserTopic->getProfileName()}
+                        {$oUserTopic->getProfileName()}
+                    {else}
+                        {$oUserTopic->getDisplayName()}
+                    {/if}
+                </a>
+            </h4>
+        </center>
     {/capture}
 
     {component 'block'

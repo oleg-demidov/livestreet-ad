@@ -1,0 +1,8 @@
+{
+   "dependencies": {
+        "button": false
+    },
+    "styles": {
+        "button-ad-add": "css/button-ad.css"
+    }
+}

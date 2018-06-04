@@ -5,7 +5,9 @@
     
     <div class="js-search-ajax-ads">
         {component 'ad:topic.ad-search-form'}
-        <div class="js-search-ad-results-count">{lang 'plugin.ad.ad.search_form.count_results' count=$iAdsCount plural=true}</div>
+        <div class="ad-search-ad-results-count js-search-ad-results-count">
+            {lang 'plugin.ad.ad.search_form.count_results' count=$iAdsCount plural=true}
+        </div>
 {/block}
 
 {block 'layout_content'}

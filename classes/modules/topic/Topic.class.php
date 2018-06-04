@@ -16,20 +16,24 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         return parent::GetItemsByFilter($aFilter, 'ModuleTopic_EntityTopic');
     }
     
-    public function AttachGeoTargets(&$oTopics) {
-        $oTopicIds = array_keys($oTopics);
+    public function AttachGeoTargets(&$aTopics) {
+        $aTopicIds = array_keys($aTopics);        
         
-        $oGeoTargets = $this->Geo_GetTargetsByTargetArray('topic', $oTopicIds);
-        foreach($oTopics as $iTopicId =>  $oTopic){
+        $oGeoTargets = $this->Geo_GetTargetsByTargetArray('topic', $aTopicIds);
+        foreach($aTopics as $iTopicId =>  $oTopic){
             if(isset($oGeoTargets[$iTopicId])){
                 $oTopic->setGeoTarget($oGeoTargets[$iTopicId]);
             }
         }
-    }
-    
-    public function GetAdsByFilter($aFilter) {
         
-        //$aFilter['#with'] = [];
+        $aGeoTargets = call_user_func_array('array_merge_recursive', $oGeoTargets);
+        $aGeoObjects = $this->Geo_GetGeoObjectsByTargets($aGeoTargets);
+        
+        return $aGeoObjects;
+    }    
+    
+    public function GetAdsByFilter($aFilter, $aAttach = []) {
+
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
         //$aFilter['#select'] = ['t.topic_id'];
@@ -55,11 +59,11 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         if(isset($aFilter['geo_object'])){
             $aFilter['#join'] = [
                 "JOIN " . Config::Get('db.table.geo_target') . " as g "
-                . "ON ( t.topic_id=g.target_id and g.".$aFilter['geo_object']->getType()."_id = ?d )" => 
+                . "ON ( t.topic_id=g.target_id AND g.".$aFilter['geo_object']->getType()."_id = ?d AND g.target_type = 'topic' )" => 
                 [$aFilter['geo_object']->getId()]
             ];
-            unset($aFilter['geo_object']);
         }
+        unset($aFilter['geo_object']);
         
         if($sText = getRequest('text')){
             $aTopicIds = $this->GetTopicIdsByText($sText);
@@ -68,18 +72,21 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-        //$this->Logger_Notice(print_r($aFilter, true));        
+        $this->Logger_Notice(print_r($aFilter, true));        
         
-        $aTopics = $this->GetTopicAdItemsByFilter($aFilter);
-
-        $this->AttachGeoTargets($aTopics['collection']);
+        $aTopics = $this->GetTopicAdItemsByFilter($aFilter);  
         
-        $aTopics['collection'] = $this->GetTopicsAdditionalData(array_keys($aTopics['collection']));
-        
-        if(sizeof($aTopics['collection'])){
-            $this->Category_AttachCategoriesForTargetItems($aTopics['collection'], 'specialization');
+        if(isset($aAttach['content']) and is_array($aAttach['content'])){
+            $aTopics['collection'] = $this->GetTopicsAdditionalData(array_keys($aTopics['collection']), $aAttach['content']);
         }
         
+        if( in_array('geo', $aAttach)){
+            $aTopics['geo_objects'] = $this->AttachGeoTargets($aTopics['collection']);
+        }   
+         
+//        foreach ($aTopics['collection'] as $aTopic){
+//            $this->Logger_Notice(print_r($aTopic->_getData(), true));
+//        }
         return $aTopics;
         
     }

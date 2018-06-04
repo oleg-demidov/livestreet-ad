@@ -152,9 +152,36 @@ class PluginAd_HookTopics extends Hook{
         $oUserCurrent = $this->User_GetUserCurrent();
         $this->Viewer_Assign('oUserCurrent', $oUserCurrent);
         
+        $this->Viewer_AddBlock('right', 'alikeTopics', ['plugin' => 'ad', 'topic' => $aParams['oTopic']], 7);
+        
         $iCount = $this->Topic_GetCountFromTopicReadByFilter(['topic_id' => $aParams['oTopic']->getId()]);
         $aParams['oTopic']->setCountRead($iCount);
         
+        $oTopic  =  $this->AttachCategory($aParams['oTopic']);
+        $oCategory = $oTopic->category->getCategory();
+        $aCategories = $this->Category_GetCategoriesByUrlFull($oCategory->getUrlFull());
+        
+        $aBreadcrumbsItems = [
+            [
+                'text'  => $this->Lang_Get('plugin.ad.ad.breadcrumbs.first'),
+                'url'   => Router::GetPath(Config::Get('plugin.ad.router.page'))
+
+            ]
+        ];
+        foreach($aCategories as $oCategory){
+            $aBreadcrumbsItems[] = [
+                'text'  => $oCategory->getTitle(),
+                'url'   => Router::GetPath(Config::Get('plugin.ad.router.page').'/'.$oCategory->getUrlFull())
+            ];
+        }        
+        
+        $this->Viewer_Assign('breadcrumbs_items', $aBreadcrumbsItems );
+        
+        $aTopics = [$aParams['oTopic']->getId() => $aParams['oTopic']];
+        $aGeoObjects  =  $this->Topic_AttachGeoTargets($aTopics);
+        $this->Viewer_Assign('aGeoObjects', $aGeoObjects );
+        
+        $this->Viewer_AddBlock('right', 'topicLocation', ['plugin' => 'ymaps', 'topic' => $aParams['oTopic']], 6);
         
     }
     

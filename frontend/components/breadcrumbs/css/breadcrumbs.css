@@ -5,3 +5,6 @@
 .fl-breadcrumbs li{
     display: inline-block;
 }
+.fl-breadcrumbs .fa{
+        color: #929292;
+}

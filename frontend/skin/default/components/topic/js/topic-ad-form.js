@@ -7,7 +7,6 @@
          */
         options: {
             selectors: {
-                
             },
 
             params : {}

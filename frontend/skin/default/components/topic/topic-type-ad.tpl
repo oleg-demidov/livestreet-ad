@@ -7,7 +7,7 @@
  * @param boolean $isPreview
  *}
 
-{$component = 'ls-topic'}
+{$component = 'ls-topic-ad'}
 {component_define_params params=[ 'type', 'topic', 'isPreview', 'isList', 'mods', 'classes', 'attributes' ]}
 
 {$user = $topic->getUser()}
@@ -19,7 +19,9 @@
 
 {$classes = "{$classes} topic js-topic"}
 
-{block 'topic_options'}{/block}
+{block 'topic_options'}
+    {component 'ad:breadcrumbs' items=$breadcrumbs_items classes="js-category-ad-breadcrumbs"}
+{/block}
 
 <article class="{$component} {cmods name=$component mods=$mods} {$classes}" {cattr list=$attributes}>
     {**
@@ -31,6 +33,14 @@
 
             {* Заголовок *}
             <{$_headingTag} class="{$component}-title ls-word-wrap">
+                {$price = $topic->property->getPropertyValue('price')}
+                {if !$price or $price == '0.00'}
+                    {$price = $aLang.plugin.ad.ad.price.contract}
+                {else}
+                    {$price = "{$price} {$aLang.plugin.ad.ad.price.currency}"}
+                {/if}
+                
+                <span class="{$component}-right">{$price}</span>
                 {block 'topic_title'}
                     {if $topic->getPublish() == 0}
                         {component 'icon' icon='file' attributes=[ title => {lang 'topic.is_draft'} ]}
@@ -41,65 +51,51 @@
                     {else}
                         {$topic->getTitle()|escape}
                     {/if}
+                    
                 {/block}
             </{$_headingTag}>
-
-            {* Информация *}
-            <ul class="{$component}-info">
-                {block 'topic_header_info'}
-                    {if ! $isPreview}
-                        {foreach $topic->getBlogs() as $blog}
-                            {if $blog->getType() != 'personal'}
-                                <li class="{$component}-info-item {$component}-info-item--blog">
-                                    <a href="{$blog->getUrlFull()}">{$blog->getTitle()|escape}</a>
-                                </li>
-                            {/if}
-                        {/foreach}
-                    {/if}
-
-                    {$isDeferred = (strtotime($topic->getDatePublish())>time()) ? true : false}
-                    <li class="{$component}-info-item {$component}-info-item--date{if $isDeferred}--deferred{/if}">
-                        <time datetime="{date_format date=$topic->getDatePublish() format='c'}" title="{if $isDeferred}{lang 'topic.is_deferred'}{else}{date_format date=$topic->getDatePublish() format='j F Y, H:i'}{/if}">
-                            {date_format date=$topic->getDatePublish() format="j F Y, H:i"}
-                        </time>
-                    </li>
-                {/block}
-            </ul>
-
-            {* Управление *}
-            {if $topic->getIsAllowAction() && ! $isPreview}
-                {block 'topic_header_actions'}
-                    {$items = [
-                        [ 'icon' => 'edit', 'url' => $topic->getUrlEdit(), 'text' => $aLang.common.edit, 'show' => $topic->getIsAllowEdit() ],
-                        [ 'icon' => 'trash', 'url' => "{$topic->getUrlDelete()}?security_ls_key={$LIVESTREET_SECURITY_KEY}", 'text' => $aLang.common.remove, 'show' => $topic->getIsAllowDelete(), 'classes' => 'js-confirm-remove-default' ]
-                    ]}
-                {/block}
-
-                {component 'actionbar' items=[[ 'buttons' => $items ]]}
-            {/if}
         </header>
+            
+
+            
+        
     {/block}
     
-    {* Дополнительные поля *}
+    {* Дополнительные поля }
         {block 'topic_content_properties'}
             {if ! $isList}
                 {component 'property' template='output.list' properties=$topic->property->getPropertyList()}
             {/if}
-        {/block}
+        {/block*}
 
     {**
      * Текст
      *}
     {block 'topic_body'}
-        {* Превью *}
-        {$previewImage = $topic->getPreviewImageWebPath(Config::Get('module.topic.default_preview_size'))}
+        {* Галерея *}
+        {$aMedia = $topic->property->getPropertyValue('fotoset')}
+        {$oProperty =  $topic->property->getProperty('fotoset')}
 
-        {if $previewImage}
-            <div class="ls-topic-preview-image">
-                <img src="{$previewImage}" />
-            </div>
-        {/if}
+        {component 'ad:gallery' aMedia=$aMedia sizePreview=$oProperty->getParam('size')}
 
+        {* Информация *}
+        <ul class="{$component}-info">
+            {block 'topic_header_info'}
+
+                <li class="{$component}-info-item {$component}-info-item--geo">
+                    {component 'ad:topic.ad-item-geo' oGeoTarget=$topic->getGeoTarget()}
+                </li>
+
+                {$isDeferred = (strtotime($topic->getDatePublish())>time()) ? true : false}
+                <li class="{$component}-info-item {$component}-info-item--date{if $isDeferred}--deferred{/if}">
+                    <time datetime="{date_format date=$topic->getDatePublish() format='c'}" title="{if $isDeferred}{lang 'topic.is_deferred'}{else}{date_format date=$topic->getDatePublish() format='j F Y, H:i'}{/if}">
+                        {date_format date=$topic->getDatePublish() format="j F Y, H:i"}
+                    </time>
+                </li>
+                
+            {/block}
+        </ul>
+        
         <div class="{$component}-content">
             <div class="{$component}-text ls-text">
                 {block 'topic_content_text'}
@@ -148,13 +144,15 @@
                     targetId      = $topic->getId()}
             {/if}
         {/if}
-
-        <footer class="{$component}-footer">
+        
+        
+        
+        <footer class="{$component}-footer"> 
             {* Информация *}
             {block 'topic_footer_info'}
-                <ul class="{$component}-info ls-clearfix">
+                <ul class="{$component}-actions ls-clearfix">
                     {block 'topic_footer_info_items'}
-                        {* Голосование *}
+                        {* Голосование }
                         {if ! $isPreview}
                             <li class="{$component}-info-item {$component}-info-item--vote">
                                 {$isExpired = strtotime($topic->getDatePublish()) < $smarty.now - Config::Get('acl.vote.topic.limit_time')}
@@ -167,49 +165,52 @@
                                          isLocked   = ( $oUserCurrent && $topic->getUserId() == $oUserCurrent->getId() ) || $isExpired
                                          showRating = $topic->getVote() || ($oUserCurrent && $topic->getUserId() == $oUserCurrent->getId()) || $isExpired}
                             </li>
-                        {/if}
+                        {/if*}
 
-                        {* Автор топика *}
-                        <li class="{$component}-info-item {$component}-info-item--author">
-                            {component 'user' template='avatar' user=$user size='xsmall' mods='inline'}
-                        </li>
-
-                        {* Ссылка на комментарии *}
-                        {* Не показываем если комментирование запрещено и кол-во комментариев равно нулю *}
-                        {if $isList && ( ! $topic->getForbidComment() || ( $topic->getForbidComment() && $topic->getCountComment() ) )}
-                            <li class="{$component}-info-item {$component}-info-item--comments">
-                                <a href="{$topic->getUrl()}#comments">
-                                    {lang name='comments.comments_declension' count=$topic->getCountComment() plural=true}
-                                </a>
-
-                                {if $topic->getCountCommentNew()}<span>+{$topic->getCountCommentNew()}</span>{/if}
-                            </li>
-                        {/if}
 
                         {if ! $isList && ! $isPreview}
                             {* Избранное *}
                             <li class="{$component}-info-item {$component}-info-item--favourite">
-                                {component 'favourite' classes="js-favourite-topic" target=$topic attributes=[ 'data-param-target_type' => $type ]}
+                                {component 'favourite' classes="js-favourite-topic-ad" target=$topic attributes=[ 'data-param-target_type' => $type ]}
                             </li>
 
                             {* Поделиться *}
                             <li class="{$component}-info-item {$component}-info-item--share">
-                                {component 'icon' icon='share'
-                                    classes="js-popover-default"
-                                    attributes=[
-                                        'title' => {lang 'topic.share'},
-                                        'data-tooltip-target' => "#topic_share_{$topic->getId()}"
-                                    ]}
+                                <div 
+                                    class="yashare-auto-init" 
+                                    data-yashareTitle="{$topic->getTitle()|escape}" 
+                                    data-yashareLink="{$topic->getUrl()}" 
+                                    data-yashareL10n="ru" 
+                                    data-yashareType="" 
+                                    data-yashareTheme="counter" 
+                                    data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,gplus">
+                                </div>
                             </li>
                         {/if}
                         {* Просмотров *}
-                        <li class="{$component}-info-item {$component}-info-item--share">
+                        <li class="{$component}-info-item {$component}-info-item--views">
                             {component 'icon' icon='eye'
                                 attributes=[
                                     'title' => {lang 'plugin.ad.ad.count_read'}
                                 ]}
                             {$topic->getCountRead()}
                         </li>
+                        
+                        {* Управление *}
+                        {if $topic->getIsAllowAction() && ! $isPreview}
+                            <li class="{$component}-info-item {$component}-info-item--actions">
+                                {block 'topic_header_actions'}
+                                    {$items = [
+                                        [ 'icon' => 'edit', 'url' => $topic->getUrlEdit(), 'text' => $aLang.common.edit, 'show' => $topic->getIsAllowEdit() ],
+                                        [ 'icon' => 'trash', 'url' => "{$topic->getUrlDelete()}?security_ls_key={$LIVESTREET_SECURITY_KEY}", 'text' => $aLang.common.remove, 'show' => $topic->getIsAllowDelete(), 'classes' => 'js-confirm-remove-default' ]
+                                    ]}
+                                {/block}
+
+                                {component 'button.group' classes="" buttons = $items }
+                            </li>
+                        {/if}
+                        
+                        
                     {/block} {* /topic_footer_info_items *}
                 </ul>
             {/block} {* /topic_footer_info *}

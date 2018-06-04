@@ -1,5 +1,8 @@
 {
-    "name":"field",
+    "dependencies":{
+        "forms":false
+        
+    },
     "templates": {
         "count":"field.count.tpl",
         "category-tree":"category-tree.tpl",

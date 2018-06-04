@@ -34,7 +34,7 @@
     <div class="{$component}-icon">{component 'icon' icon="bars"}</div>
     <div class="input-close-but" >X</div>
     <input type="text" class="{$component}-input {$component}-category-input js-field-category" 
-            placeholder="{$aLang.plugin.freelancer.field_category.placeholder}"
+            placeholder="{$aLang.plugin.ad.ad.search_form.category.placeholder}"
            value="{$chooseName}" data-show-dropdown="{$showDropdown}" autocomplete="off">
     {if $chooseId}
         <input type="hidden" name="categories[]" value="{$chooseId}" class="appended-category appended-category-id" />

@@ -38,9 +38,12 @@ class PluginAd extends Plugin
         $this->Component_Add('ad:category-tabs');
         $this->Component_Add('ad:topic');
         $this->Component_Add('ad:field');
+        $this->Component_Add('ad:button');
         $this->Component_Add('ad:breadcrumbs');
         $this->Component_Add('ad:phone-hide');
         $this->Viewer_AppendScript($sPath = Plugin::GetTemplateWebPath('ad').'assets/js/init.js');
+        
+        $this->Viewer_AppendStyle($sPath = Plugin::GetTemplateWebPath('ad').'assets/css/plugin.css');
         
         $this->Geo_AddTargetType('topic');
     }
@@ -62,7 +65,7 @@ class PluginAd extends Plugin
                     'count_max' => 10
                 ),
                 'params'=>array(
-                    'size' => '100x100crop'
+                    'size' => '120x120crop'
                 ),
                 'additional'=>array()
             ),

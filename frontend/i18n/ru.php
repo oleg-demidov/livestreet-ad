@@ -7,11 +7,16 @@ return [
         ]
     ],
     'ad' => [
+        'price' => [
+            'currency' => 'тг',
+            'contract' => 'Договорная'
+        ],
         'form' => [
             'tab_specialization_title' => 'Выбрать специализацию',
             'tab_form_title' => 'Описание',
             'tab_properties_title' => 'Дополнительно',
-            'tab_contact_title' => 'Контакты'
+            'tab_contact_title' => 'Контакты',
+            'button_next' => 'Далее'
         ],
         'search_form' => [
             'text' => [
@@ -25,7 +30,9 @@ return [
                     'by_date_publish' => '___sort.by_date___'
                 ]
             ],
-            
+            'category' => [
+                'placeholder' => 'Выберите категорию'
+            ],
             'toggle' => [
                 'list' => 'Список',
                 'list_title' => 'Показать списком',
@@ -34,6 +41,9 @@ return [
             ],
             'count_results' => 'Найден %%count%% объявление;Найдено %%count%% объявления;Найдено %%count%% объявлений',
             
+        ],
+        'breadcrumbs' => [
+            'first' => 'Все категории'
         ],
         'block_search' => [
             'title' => 'Фильтр обьявлений',
@@ -45,6 +55,9 @@ return [
                 'from' => 'От',
                 'to' => 'До'
             ]
+        ],
+        'block_add' =>[
+            'text' => 'Добавить объявление'
         ],
         'block_contacts' => [
             'blankslate' => [

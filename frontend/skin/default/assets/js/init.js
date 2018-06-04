@@ -15,10 +15,43 @@ jQuery(document).ready(function($){
         });
     }
     
-    $('.js-topic-category').lsTabs();
+    /*
+     * Валидация формы
+     */
+    $('.js-form-validate-ad').parsley();
+//    
+    $('.js-topic-forms').lsTabs({
+        tabbeforeactivate:function(e, data){
+            let activeTab = $('.js-topic-forms').lsTabs('getActiveTab');
+            let resultValidate = $('.js-form-validate-ad').parsley().validate({ group:activeTab.data('tabGroup') });
+            if(!resultValidate){
+                activeTab.addClass('ls-tab--danger');
+            }else{
+                activeTab.removeClass('ls-tab--danger');
+            }            
+        }
+    }); 
     
     
-    $('.js-form-validate-ad').topicAdForm();
+    
+    /*
+     * Кнопка далее
+     */
+    $('.js-next-form').on('click', function(){
+        let tabs = $('.js-topic-forms').lsTabs('getTabs');
+        let iActivate = 0;
+        $.each(tabs, function(i,el){
+            if($(el).hasClass('active')){
+                iActivate = i;
+            }
+        });
+
+        if((iActivate+1) < tabs.length){
+            $(tabs[iActivate+1]).lsTab('activate');
+            $(tabs[iActivate]).lsTab('deactivate');
+        }        
+        
+    });
     
     $('.js-category-tree').flFieldCategoryTree(); 
     
@@ -99,7 +132,19 @@ jQuery(document).ready(function($){
         ],
         afterupdate: function ( event, data ) {
             $( '.js-topic' ).lsTopic();
+            
             paginationAjax(); 
+            
+            $('.ya-share2').each(function(i,el){
+                Ya.share2(el);
+            });
+            
+            $('.js-popover-default').lsTooltip({
+                useAttrTitle: false,
+                trigger: 'click',
+                classes: 'ls-tooltip-light'
+            });
+            
             $('.js-category-ad-breadcrumbs').remove();
             $('.layout-content').prepend( data.response.breadcrumbs_html );
         }
@@ -114,7 +159,13 @@ jQuery(document).ready(function($){
         $('.js-pagination-topics-ad').on('click', function(e){
             $( '.js-search-ajax-ads' ).lsSearchAjax('update', {page:$(e.target).html()});
             return false;
-        })
+        });      
+        
+        $('.js-favourite-topic-ad').lsFavourite({
+            urls: {
+                    toggle: aRouter['ajax'] + 'favourite/topic/'
+                }
+        });
     }
     paginationAjax();
     

@@ -6,5 +6,6 @@ class PluginAd_ModuleTopic_EntityTopicAd extends PluginAd_Inherit_ModuleTopic_En
     public function getPropertyTargetType()
     {
         return 'topic_ad';
-    }
+    }   
+    
 }

@@ -18,11 +18,9 @@
     
     {$smarty.capture.pagination}
 
-    <ul class="ls-item-group topic-ad-group">
-        {foreach $topics as $topic}
-            {component 'ad:topic' template='ad-item' topic=$topic }
-        {/foreach}
-    </ul>
+    {foreach $topics as $topic}
+        {component 'ad:topic' template='ad-item' topic=$topic }
+    {/foreach}
     
     {$smarty.capture.pagination}
     

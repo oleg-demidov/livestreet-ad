@@ -20,6 +20,7 @@
         classes = 'js-search-toggle-view'
         label = $aLang.search.toggle_view.label
         hook  = 'search_users_view'
+        activeItem = 'list'
         items = [
             [ name => 'list',  'icon' => 'th-list',  text => $aLang.search.toggle_view.items.list ]
         ]}

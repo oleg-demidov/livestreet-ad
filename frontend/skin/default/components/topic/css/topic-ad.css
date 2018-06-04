@@ -4,6 +4,104 @@
 .user-profile--user-author{
     margin: -40px;
 }
+.topic-user-avatar{
+    width: 100%;
+}
 .ls-block.topics-alike .ls-block-content{
     padding: 0;
+}
+.ls-topic-ad-item{
+    margin-bottom: 20px;
+    border-top: 1px solid #e6e6e6;
+    padding-top: 20px;
+}
+.ls-topic-ad-item:last-of-type{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 20px;
+}
+
+.ls-topic-ad-item-image{
+    width: 120px;
+    height: 120px;
+}
+
+
+.ls-topic-ad-item-left{
+    float: left;
+    margin: 0 10px 0 0;
+}
+.ls-topic-ad-item-body{
+    padding-left: 110px;
+}
+.ls-topic-ad-item-title{
+    margin-bottom: 5px;
+}
+.ls-topic-ad-item-right, .ls-topic-ad-right{
+    float: right;
+    font-weight: bold;
+    color: #e89825;
+}
+.ls-topic-ad-item-description{
+    padding-right: 5px;
+    min-height: 80px;
+}
+
+.ls-topic-ad-item-footer{
+    clear: both;
+}
+
+
+.ls-topic-ad-item-info-item, .ls-topic-ad-info-item{
+    float: left;
+    padding: 8px 0 0 0;
+    margin-right: 20px;
+}
+.ls-topic-ad-item-info-item--favourite{
+    width: 111px;
+}
+.ls-topic-ad-item-info{
+    margin-left: 5px;
+}
+.ls-topic-ad-item-info-item--author .ls-avatar-image{
+    width: 32px;
+    height: 32px;
+}
+.ls-topic-ad-item-info-item--comments{
+    padding-top: 14px;
+}
+.ls-topic-ad-item-info-item--share{
+    padding-top: 13px;
+}
+.ls-topic-ad-info-item--actions{
+    padding: 1px 0 0 0;
+}
+
+.ls-topic-ad-info, .ls-topic-ad-actions{
+    overflow: auto;    
+}
+.ls-topic-ad-info{
+    margin-bottom: 15px;
+}
+.ls-topic-ad-info-item--date{
+    float: right;
+}
+.ls-topic-ad-info-item--geo{
+    font-weight: bold;
+}
+.ls-topic-ad-info-item--favourite{
+    padding: 0;
+}
+.ls-topic-ad-info-item--share{
+    padding-top: 3px;
+}
+.ls-topic-ad-info-item--actions{
+    float: right;
+    margin-right: 0;
+}    
+
+.ls-topic-ad-footer{
+    padding: 10px;
+    background: #ededed;
+    margin-bottom: 10px;
 }

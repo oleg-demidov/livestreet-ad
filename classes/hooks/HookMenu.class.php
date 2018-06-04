@@ -12,11 +12,15 @@ class PluginAd_HookMenu extends Hook{
 
     public function NavMain($aParams)
     {
-        $aResult = array_merge( [[
+        $startItems = array_slice($aParams['items'], 0, Config::Get('plugin.ad.menu.position'));
+        
+        $endItems = array_slice($aParams['items'], Config::Get('plugin.ad.menu.position'));
+        
+        $aResult = array_merge($startItems,  [[
             'text' => $this->Lang_Get('plugin.ad.menu.master.title'),
             'name' => 'masters',
             'url'  => Router::GetPath('masters')
-        ]], $aParams['items']);
+        ]], $endItems);
         return    $aResult;
 
     }
