@@ -51,13 +51,13 @@ class PluginAd extends Plugin
 
     public function Activate()
     {
-//        $oType = Engine::GetEntity('ModuleTopic_EntityTopicType');
-//        $oType->_setDataSafe(['name' =>"Объявление", 'name_many' =>'Объявления', 'code' => 'ad' ]);
-//        $oType->setParams(['allow_text' => 1, "allow_tags" => 1, "allow_deferred_all" => 1, "css_icon" =>'']);
-//        $oType->setAllowRemove(1);
-//        $oType->setState( ModuleTopic::TOPIC_TYPE_STATE_ACTIVE );
-//        $oType->setDateCreate(date("Y-m-d H:i:s"));
-//        $this->Topic_AddTopicType($oType);
+        $oType = Engine::GetEntity('ModuleTopic_EntityTopicType');
+        $oType->_setDataSafe(['name' =>"Объявление", 'name_many' =>'Объявления', 'code' => 'ad' ]);
+        $oType->setParams(['allow_text' => 1, "allow_tags" => 1, "allow_deferred_all" => 1, "css_icon" =>'']);
+        $oType->setAllowRemove(1);
+        $oType->setState( ModuleTopic::TOPIC_TYPE_STATE_ACTIVE );
+        $oType->setDateCreate(date("Y-m-d H:i:s"));
+        $this->Topic_AddTopicType($oType);
         
         $this->Category_CreateTargetType('specialization', 'Специализации', array(), true);
         
@@ -96,7 +96,7 @@ class PluginAd extends Plugin
                 'additional'=>array()
             )
         );
-        //$this->Property_CreateDefaultTargetPropertyFromPlugin($aProperties, 'topic_ad');
+        $this->Property_CreateDefaultTargetPropertyFromPlugin($aProperties, 'topic_ad');
         return true;
     }
 
