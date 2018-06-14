@@ -62,6 +62,7 @@ class PluginAd_ActionAds_EventAds extends Event {
             $this->Viewer_Assign('breadcrumbs_items', $this->getBreadcrumbsItems( $aFilter['categories'] ) );
         }
         
+        $aFilter['topic_publish'] = 1;
         $aFilter['#with'] = ['#category'];
 
         $aAds = $this->Topic_GetAdsByFilter($aFilter, ['geo', 'content' => ['properties', 'favourite']]);        
@@ -86,10 +87,13 @@ class PluginAd_ActionAds_EventAds extends Event {
         $aAdTags = $this->Topic_GetTopicTagItemsByFilter([
             '#select' => ['t.topic_tag_id', 'topic_tag_text'],
             '#index-from' => 'topic_tag_id',
+            '#select' => ['*', 'count(t.topic_tag_text) as count'],
+            '#group' => ['topic_tag_text'],
             '#join' => [
                 "JOIN " . Config::Get('db.table.topic') . " tc ON tc.topic_id = t.topic_id AND tc.topic_type = 'ad' "
             ]
         ]);
+        $this->Tools_MakeCloud($aAdTags);
         $this->Viewer_Assign('tags', $aAdTags );
         
         $this->AssignGeo($oGeoTarget);
@@ -156,7 +160,7 @@ class PluginAd_ActionAds_EventAds extends Event {
         $oViewer->Assign('paging',$aPaging, true);
         $oViewer->Assign('oUserCurrent',$this->oUserCurrent );
         if(isset($aAds['geo_objects'])){
-            $this->Viewer_Assign('aGeoObjects',$aAds['geo_objects'], true );
+            $oViewer->Assign('aGeoObjects',$aAds['geo_objects'] );
         }
         
         $this->Viewer_AssignAjax('html', $oViewer->Fetch("component@ad:topic.ad-list"));

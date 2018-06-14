@@ -3,8 +3,9 @@
 }
 
 .fl-category-tabs-block{
-    width: 230px;
+    width: 250px;
     margin-bottom: 15px;
+    float: left;
 }
 .fl-category-tabs .parent-item{
     font-weight: bolder;
@@ -25,10 +26,12 @@
 }
 .fl-category-tabs .ls-tab-list{
     float: left;
+    width: 25%;
 }
 .fl-category-tabs .ls-tabs-panes{
-    float: right;
-    width: 500px;
+    float: left;
+    width: 70%;
+    margin-left: 40px;
 }
 .fl-category-tabs .ls-tab{
     float: none;
@@ -43,7 +46,7 @@
     right: -26px;
     position: absolute;
     border: 17px solid transparent;
-    border-left: 10px solid #2f8bbc;
+    border-left: 10px solid #2891d3;
 }
 .fl-category-tabs .ls-tab:hover:not(.active){
     background: #eee;

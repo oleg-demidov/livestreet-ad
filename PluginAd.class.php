@@ -21,7 +21,8 @@ class PluginAd extends Plugin
             'ModuleTopic' => '_ModuleTopic'
         ),
         'action' => array(
-            'ActionAjax' => '_ActionAjax'
+            'ActionAjax' => '_ActionAjax',
+            'ActionProfile' => '_ActionProfile'
         ),
         'entity'=>[
             'ModuleTopic_EntityTopicAd' => '_ModuleTopic_EntityTopicAd'

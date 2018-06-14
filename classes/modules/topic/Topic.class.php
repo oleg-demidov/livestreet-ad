@@ -26,7 +26,11 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-        $aGeoTargets = call_user_func_array('array_merge_recursive', $oGeoTargets);
+        if(sizeof($oGeoTargets)){
+            $aGeoTargets = call_user_func_array('array_merge_recursive', $oGeoTargets);
+        }else{
+            $aGeoTargets = [];
+        }
         $aGeoObjects = $this->Geo_GetGeoObjectsByTargets($aGeoTargets);
         
         return $aGeoObjects;
@@ -36,6 +40,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
 
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
+        
         //$aFilter['#select'] = ['t.topic_id'];
                 
         if(isset($aFilter['categories']) and is_array($aFilter['categories'])){
@@ -72,7 +77,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
             }
         }
         
-        $this->Logger_Notice(print_r($aFilter, true));        
+        //$this->Logger_Notice(print_r($aFilter, true));        
         
         $aTopics = $this->GetTopicAdItemsByFilter($aFilter);  
         
@@ -83,10 +88,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         if( in_array('geo', $aAttach)){
             $aTopics['geo_objects'] = $this->AttachGeoTargets($aTopics['collection']);
         }   
-         
-//        foreach ($aTopics['collection'] as $aTopic){
-//            $this->Logger_Notice(print_r($aTopic->_getData(), true));
-//        }
+
         return $aTopics;
         
     }
@@ -103,7 +105,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
         if(!$sRegexp){
             return false;
         }
-       // $Text = "%$Text%";
+
         $aTopics = $this->GetTopicItemsByFilter([
             '#select'       => ['t.topic_id'],
             '#index-from'   => 'topic_id',

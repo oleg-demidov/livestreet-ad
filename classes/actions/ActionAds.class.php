@@ -212,21 +212,31 @@ class PluginAd_ActionAds extends ActionPlugin
     }
     
     public function _getGeoByParam($aFilter) {
-        $aCities = $this->Geo_GetCities($aFilter, [], 1, 1);
+        $aCountryFilter = $this->_getCountryFilter();
+        
+        $aCities = $this->Geo_GetCities(array_merge($aFilter, $aCountryFilter), [], 1, 1);
         if($aCities['count']){
-            return sizeof($aCities['collection'])?$aCities['collection'][0]:null;
+            return sizeof($aCities['collection'])?array_shift($aCities['collection']):null;
         }
         
-        $aRegions = $this->Geo_GetRegions($aFilter, [], 1, 1); 
+        $aRegions = $this->Geo_GetRegions(array_merge($aFilter, $aCountryFilter), [], 1, 1); 
         if($aRegions['count']){
-            return sizeof($aRegions['collection'])?$aRegions['collection'][0]:null;
+            return sizeof($aRegions['collection'])?array_shift($aRegions['collection']):null;
         }
         
         $aCountries = $this->Geo_GetCountries($aFilter, [], 1, 1);
         if($aCountries['count']){
-            return sizeof($aCountries['collection'])?$aCountries['collection'][0]:null;
+            return sizeof($aCountries['collection'])?array_shift($aCountries['collection']):null;
         }
 
+    }
+    
+    public function _getCountryFilter() {
+        $aCountries = $this->Geo_GetCountries(['code' => strtoupper(Config::Get('plugin.ad.country_code'))], [], 1, 1);
+        if(sizeof($aCountries)){
+            return [ 'country_id' => array_shift($aCountries['collection'])->getId() ];
+        }
+        return [];
     }
     
     public function _getUrlByFilter($aFilter, $iPage = null) {
@@ -248,7 +258,6 @@ class PluginAd_ActionAds extends ActionPlugin
         
         return $sUrl;
     }   
-    
     
 
 }

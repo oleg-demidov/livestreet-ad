@@ -19,8 +19,10 @@ class PluginAd_HookTopics extends Hook{
         $this->AddHook('topic_add_after', 'TopicEditAfter');
         
         $this->AddHook('topic_show', 'TopicShow');
+        
+        
     }
-
+    
     
     public function TopicAdRemove($aParams)
     {
@@ -45,15 +47,21 @@ class PluginAd_HookTopics extends Hook{
         }  
         $this->AddFields($aParams);
     }
-        
-    public function AddFields($aParams) {
-            
+    
+    public function AssignCategories() {
         if ($oType = $this->Category_GetTypeByTargetType('specialization')) {
             $aCategories = $this->Category_LoadTreeOfCategory(array('type_id' => $oType->getId()));
         }
         if(isset($aCategories)){
             $this->Viewer_Assign('aCategories', $aCategories);
+            return $aCategories;
         }
+        return [];
+    }
+        
+    public function AddFields($aParams) {
+            
+        $this->AssignCategories();
         
         if(isset($aParams['oTopic'])){ 
             $aCategories = [];
@@ -89,6 +97,8 @@ class PluginAd_HookTopics extends Hook{
                 $this->Viewer_Assign('aGeoCities', $aCities['collection']);
             }
         }
+        
+        $this->Viewer_Assign('aUserFieldsContact', $this->User_getUserFields(array('contact', 'social')));
     }
 
     public function TopicEditAfter($aParams) {
@@ -99,7 +109,7 @@ class PluginAd_HookTopics extends Hook{
         
         $oTopic = $this->AttachCategory($aParams['oTopic']);
         
-        $oTopic->_Validate();
+        $oTopic->_Validate([$oTopic->category->getParam('validate_field')]);
         $oTopic->category->CallbackAfterSave();
         
         
@@ -125,12 +135,37 @@ class PluginAd_HookTopics extends Hook{
         } else {
             $this->Geo_DeleteTargetsByTarget('topic', $oTopic->getId());
         }
+        
+        
+        $oUserCurrent = $this->User_GetUserCurrent();
+        /**
+        * Динамические поля контактов, type = array('contact','social')
+        */
+        $aType = array('contact', 'social');
+        $aFields = $this->User_getUserFields($aType);
+        /**
+         * Удаляем все поля с этим типом
+         */
+        $this->User_DeleteUserFieldValues($oUserCurrent->getId(), $aType);
+        $aFieldsContactType = getRequest('profile_user_field_type');       
+        $aFieldsContactValue = getRequest('profile_user_field_value');     
+        if (is_array($aFieldsContactType)) {
+            foreach ($aFieldsContactType as $k => $v) {
+                $v = (string)$v;
+                if (isset($aFields[$v]) and isset($aFieldsContactValue[$k]) and is_string($aFieldsContactValue[$k])) {
+                    $this->User_setUserFieldsValues($oUserCurrent->getId(),
+                        array($v => $aFieldsContactValue[$k]),
+                        Config::Get('module.user.userfield_max_identical'));
+                }
+            }
+        }
     }
     
     public function AttachCategory($oTopic) {
         $oTopic->AttachBehavior('category', [
             'class' => 'ModuleCategory_BehaviorEntity',
             'target_type'                    => 'specialization',
+            'validate_enable' =>  true,
             // Обязательное заполнение категории
             'validate_require'               => false,
             // Получать значение валидации не из сущности, а из реквеста (используется поле form_field)
@@ -159,7 +194,12 @@ class PluginAd_HookTopics extends Hook{
         
         $oTopic  =  $this->AttachCategory($aParams['oTopic']);
         $oCategory = $oTopic->category->getCategory();
-        $aCategories = $this->Category_GetCategoriesByUrlFull($oCategory->getUrlFull());
+        
+        if($oCategory){
+            $aCategories = $this->Category_GetCategoriesByUrlFull($oCategory->getUrlFull());
+        }else{
+            $aCategories = [];
+        }
         
         $aBreadcrumbsItems = [
             [

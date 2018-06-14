@@ -23,7 +23,7 @@ class PluginAd_BlockAlikeTopics extends Block
         $oGeoObject = $this->Geo_GetGeoObjectByTarget('topic', $oTopic->getId());
         $aFilter['geo_object'] = $oGeoObject;
         
-        $aTopics = $this->Topic_GetAdsByFilter($aFilter);
+        $aTopics = $this->Topic_GetAdsByFilter($aFilter,[ 'content' => ['properties', 'favourite']]);
         
         $this->Viewer_Assign('topics', $aTopics, true);
         $this->SetTemplate('component@ad:topic.block.alike-topics-list');

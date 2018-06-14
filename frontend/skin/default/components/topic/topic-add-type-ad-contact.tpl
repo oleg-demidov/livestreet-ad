@@ -17,6 +17,29 @@
         'trigger'           => 'keyup',
         'group'             => 'contacts'
     ]}
+    
+{* Контакты *}
+
+
+
+<fieldset class="js-user-fields">
+    <legend>{lang name='user.settings.profile.contact'}</legend>
+
+    {$contacts = $oUserCurrent->getUserFieldValues( true, array('contact', 'social') )}
+
+    {* Список пользовательских полей, шаблон определен в начале файла *}
+    <div class="js-user-field-list ls-mb-15">
+        {foreach $contacts as $contact}
+            {call userfield field=$contact}
+        {foreachelse}
+            {component 'blankslate' classes='js-user-fields-empty' text=$aLang.common.empty}
+        {/foreach}
+    </div>
+
+    {if $aUserFieldsContact}
+        {component 'button' type='button' classes='js-user-fields-submit' text=$aLang.common.add}
+    {/if}
+</fieldset>
 
 {**
 * Кнопки

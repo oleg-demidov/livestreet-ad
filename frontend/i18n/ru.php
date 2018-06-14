@@ -4,9 +4,15 @@ return [
     'menu' => [
         'master' => [
             'title' => 'Мастера'
+        ],
+        'community' => [
+            'title' => 'Сообщество'
         ]
     ],
     'ad' => [
+        'title' => 'Объявление',
+        'titles' => 'Объявления',
+        'no_geo_text' => 'Весь Казахстан',
         'price' => [
             'currency' => 'тг',
             'contract' => 'Договорная'

@@ -1,6 +1,23 @@
 {component_define_params params=[ 'topic', 'type', 'skipBlogs', 'blogs', 'classes' ]}
 
 
+{* Шаблон пользовательского поля (userfield) *}
+{function name=userfield}
+    <div class="ls-mb-15 js-user-field-item" {if ! $field}id="user-field-template" style="display:none;"{/if}>
+        <select name="profile_user_field_type[]">
+            {foreach $aUserFieldsContact as $fieldAll}
+                <option value="{$fieldAll->getId()}" {if $field && $fieldAll->getId() == $field->getId()}selected{/if}>
+                    {$fieldAll->getTitle()|escape}
+                </option>
+            {/foreach}
+        </select>
+
+        <input type="text" name="profile_user_field_value[]" value="{if $field}{$field->getValue()|escape}{/if}" class="ls-width-200">
+        {component 'icon' icon='remove' classes='js-user-field-item-remove' attributes=[ title => {lang 'common.remove'} ]}
+    </div>
+{/function}
+
+{call userfield field=false}
 
 <form action="" method="POST" enctype="multipart/form-data" id="topic-add-form" class="{$classes} js-form-validate-ad" data-content-action="{( $topic ) ? 'edit' : 'add'}">
 
@@ -31,10 +48,7 @@
     ]
 ]}
 
-
-
 </form>
-
 
 {* Блок с превью текста *}
 {component 'topic' template='preview'}

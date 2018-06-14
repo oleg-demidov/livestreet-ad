@@ -5,7 +5,7 @@
 {extends 'component@tabs'}
 
 {block 'tabs_options'}
-    {component_define_params params=[ 'categories', 'categoriesSelected', 'name']}
+    {component_define_params params=[ 'categories', 'categoriesSelected', 'name', 'widthPanes']}
     {$classes= "{$classes} fl-category-tabs"}
     
     {$tabs=[]}

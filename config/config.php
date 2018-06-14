@@ -8,8 +8,13 @@
  */
 $config['router']['page'] = 'masters';
 
+$config['$root$']['router']['page']['community'] = 'ActionIndex';
+$config['$root$']['router']['page']['index'] = 'PluginAd_ActionIndex';
+
 $config['$root$']['router']['page'][$config['router']['page']] = 'PluginAd_ActionAds';
 $config['$root$']['db']['table']['topic_ad'] = '___db.table.prefix___topic';
+
+$config['country_code'] = 'kz'; //Отсекает поиск по другим регионам
 
 $config['acl'] = [
     'user' => [
@@ -61,6 +66,22 @@ $config['$root$']['block']['rule_topic_type'] = array(
     )
 );
 
-
+/**
+ * Настройки вывода блоков
+ */
+$config['$root$']['block']['rule_index_blog'] = array(
+    'action' => array(
+        'community',
+        'blog' => array('{topics}', '{blog}')
+    ),
+    'blocks' => array(
+        'right' => array(
+            'activityRecent' => array('priority' => 100),
+            'topicsTags'   => array('priority' => 50),
+            'blogs'  => array('params' => array(), 'priority' => 1)
+        )
+    ),
+    'clear'  => false,
+);
 
 return $config;

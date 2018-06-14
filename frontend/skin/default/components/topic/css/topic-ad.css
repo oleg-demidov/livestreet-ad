@@ -55,10 +55,10 @@
 .ls-topic-ad-item-info-item, .ls-topic-ad-info-item{
     float: left;
     padding: 8px 0 0 0;
-    margin-right: 20px;
+    margin-right: 25px;
 }
 .ls-topic-ad-item-info-item--favourite{
-    width: 111px;
+    width: 100px;
 }
 .ls-topic-ad-item-info{
     margin-left: 5px;
