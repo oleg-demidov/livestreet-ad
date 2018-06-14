@@ -8,7 +8,8 @@
  */
 $config['router']['page'] = 'masters';
 
-$config['$root$']['router']['page']['community'] = 'ActionIndex';
+Config::Set('router.page.community', 'ActionIndex');
+//$config['$root$']['router']['page']['community'] = 'ActionIndex';
 $config['$root$']['router']['page']['index'] = 'PluginAd_ActionIndex';
 
 $config['$root$']['router']['page'][$config['router']['page']] = 'PluginAd_ActionAds';
