@@ -30,7 +30,7 @@
                     el.addClass('ls-button--danger');
                 }
                 
-                if( inst.isValid({group: value} === true)){
+                if( inst.isValid({group: value}) === true){
                     el.removeClass('ls-button--danger');
                 }
             }); 
