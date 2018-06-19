@@ -40,6 +40,7 @@ class PluginAd_ModuleTopic extends PluginAd_Inherit_ModuleTopic
 
         $aFilter['#index-from'] = 'topic_id';
         $aFilter['topic_type'] = 'ad';
+        $aFilter['#cache'] = [ 2 => 5 ];
         
         //$aFilter['#select'] = ['t.topic_id'];
                 
