@@ -35,7 +35,8 @@ $config['topic'] = [
     'count_page_line' => 5,
     'per_page'  => 10,
     'count_alike' => 5,
-    'count_words_item' => 20
+    'count_words_item' => 20,
+    'cache_time' => 5
 ];
 
 
