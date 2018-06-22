@@ -5,12 +5,6 @@
     <form  method="POST" class="{$component}" action="{router page="masters"}" > 
         {component "field.hidden" name="form" value="1"}        
             
-        {component 'ad:field.category-tree' 
-            url = {router page="masters"}
-            categoriesSelected = $specializationSelected
-            aCategories=$aCategories 
-            label="Специализация"} 
-            
         {* Местоположение *}
         {component 'field' template='geo'
             classes   = 'js-field-geo-default'
@@ -21,6 +15,12 @@
             cities    = $aGeoCities
             place     = $oGeoTarget} 
             
+        {component 'ad:field.category-tree' 
+            url = {router page="masters"}
+            categoriesSelected = $specializationSelected
+            aCategories=$aCategories 
+            label="Специализация"}             
+        
         {* Цена от и до *}
         {component 'ad:field' template='diapazon'
             name      = 'price'
