@@ -21,11 +21,30 @@
     </style>
 {/block}
 
+
+
 {block 'layout_container_before'}
+    {capture 'content_j'}
+        {if $oUserCurrent}
+            {$butAdd.url = {router page="content/add/ad"}}
+            {$butAdd.classes = "header-j"}
+        {else}
+            {$butAdd.url = {router page="auth/login"}}
+            {$butAdd.classes = "js-modal-toggle-login header-j"}
+        {/if}
+
+        {component "ad:button" 
+            text        = $aLang.plugin.ad.ad.block_add.text
+            mods        = "warning large ad-add"
+            params      = $butAdd
+        }
+    {/capture}
+    
     {$nameSplit = '.'|explode:Config::Get('view.name')}
     {component 'jumbotron'
         title    = "<span class='name-first'>{$nameSplit[0]}</span>.<span class='name-second'>{$nameSplit[1]}</span>"
         subtitle = Config::Get('view.description')
+        content = {$smarty.capture.content_j}
         titleUrl = {router page='/'}
         classes  = 'layout-header'}
 {/block}  
